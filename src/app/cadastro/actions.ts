@@ -1,7 +1,6 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 import { prisma } from "@/lib/db";
 import { notifyAdminSignup } from "@/lib/mailer";
@@ -15,7 +14,13 @@ const schema = z.object({
   next: z.string().optional().nullable(),
 });
 
-export async function cadastroAction(formData: FormData): Promise<void> {
+export type CadastroState = {
+  error?: string;
+  fieldErrors?: { email?: string; name?: string };
+  ok?: boolean;
+};
+
+export async function cadastroAction(_prev: CadastroState, formData: FormData): Promise<CadastroState> {
   const raw = {
     email: String(formData.get("email") || "").trim().toLowerCase(),
     name: String(formData.get("name") || "").trim() || null,
@@ -26,7 +31,15 @@ export async function cadastroAction(formData: FormData): Promise<void> {
 
   const parsed = schema.safeParse(raw);
   if (!parsed.success) {
-    redirect("/cadastro?error=invalid");
+    const fe: CadastroState["fieldErrors"] = {};
+    for (const issue of parsed.error.issues) {
+      const field = issue.path[0] as string;
+      if (field === "email" || field === "name") fe[field] = issue.message;
+    }
+    return {
+      error: "Verifique os campos preenchidos.",
+      fieldErrors: fe,
+    };
   }
   const data = parsed.data;
 
@@ -80,9 +93,10 @@ export async function cadastroAction(formData: FormData): Promise<void> {
     ua,
   }).catch((e) => console.error("[cadastro] admin notify error", e));
 
-  // Trigger magic link email
+  // Trigger magic link email (signIn throws NEXT_REDIRECT internally)
   await signIn("nodemailer", {
     email: data.email,
     redirectTo: data.next && data.next.startsWith("/") ? data.next : "/",
   });
+  return { ok: true };
 }

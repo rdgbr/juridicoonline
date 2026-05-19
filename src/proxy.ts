@@ -8,7 +8,7 @@ const AUTH_COOKIES = [
   "__Secure-next-auth.session-token",
 ];
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const url = req.nextUrl;
   const isLogged = AUTH_COOKIES.some((c) => req.cookies.has(c));
 

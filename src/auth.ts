@@ -25,7 +25,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       maxAge: 24 * 60 * 60, // 24h
       async sendVerificationRequest({ identifier, url }) {
         const host = new URL(url).host;
-        const tpl = magicLinkEmail(url, host, identifier);
+        // Wrap the original callback URL in our /verify page to avoid Gmail/antivirus
+        // pre-fetch consuming the one-shot token. User clicks "Confirm" on /verify,
+        // which then GETs the real callback URL (with user gesture, so safer).
+        const wrappedUrl = `${process.env.NEXT_PUBLIC_SITE_URL || `https://${host}`}/verify?next=${encodeURIComponent(url)}`;
+        const tpl = magicLinkEmail(wrappedUrl, host, identifier);
         const r = await sendEmail({
           to: identifier,
           subject: tpl.subject,

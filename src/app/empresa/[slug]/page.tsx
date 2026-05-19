@@ -75,13 +75,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     empresa.opcao_mei === "S" && "MEI",
   ].filter(Boolean) as string[];
 
+  const ogImage = `${SITE_URL}/api/og?cnpj=${empresa.cnpj_completo}`;
+
   return {
     title,
     description: description.slice(0, 160),
     keywords,
     alternates: { canonical: `/empresa/${empresaSlug(empresa.cnpj_completo, empresa.razao_social)}` },
-    openGraph: { title, description, type: "website" },
-    twitter: { card: "summary", title, description },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: empresa.razao_social }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 

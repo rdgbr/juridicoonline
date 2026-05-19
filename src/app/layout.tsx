@@ -42,14 +42,23 @@ export const metadata: Metadata = {
     title: "Jurídico Online — Consulta de empresas, sócios e CNPJ",
     description:
       "Mais de 65 milhões de empresas. Pesquise por CNPJ, razão social, sócio, telefone. Cadastre-se grátis.",
+    images: [{ url: `${SITE_URL}/api/og`, width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Jurídico Online — Consulta de empresas e CNPJ",
     description: "65 milhões de empresas brasileiras. Cadastre-se grátis.",
+    images: [`${SITE_URL}/api/og`],
   },
   robots: { index: true, follow: true },
   alternates: { canonical: "/" },
+};
+
+export const viewport = {
+  themeColor: "#0F4C81",
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "light",
 };
 
 export default function RootLayout({

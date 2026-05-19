@@ -244,3 +244,30 @@ export async function countNewCompanies(uf?: string, days = 7): Promise<number> 
   const res = await searchEmpresas({ q: "", limit: 1, filter });
   return res.estimatedTotalHits;
 }
+
+/**
+ * List empresas filtered (maiores by capital, MEI, Simples Nacional).
+ */
+export async function listFilteredByUF(
+  uf: string,
+  filterType: "maiores" | "mei" | "simples",
+  limit = 100
+): Promise<Empresa[]> {
+  const filter: string[] = [`uf = "${uf.toUpperCase()}"`, 'situacao = "ATIVA"'];
+  let sort: string[] = ["capital_social:desc"];
+
+  if (filterType === "mei") {
+    filter.push('opcao_mei = "S"');
+    sort = ["data_inicio_atividade:desc"];
+  } else if (filterType === "simples") {
+    filter.push('opcao_simples = "S"');
+    sort = ["capital_social:desc"];
+  }
+
+  const res = await empresasIndex.search<Empresa>("", {
+    limit,
+    filter,
+    sort,
+  });
+  return res.hits;
+}

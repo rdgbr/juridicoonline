@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 import { z } from "zod";
 
@@ -9,12 +8,16 @@ const schema = z.object({
   next: z.string().optional().nullable(),
 });
 
-export async function loginAction(formData: FormData): Promise<void> {
+export type LoginState = { error?: string; ok?: boolean };
+
+export async function loginAction(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const parsed = schema.safeParse({
     email: String(formData.get("email") || "").trim().toLowerCase(),
     next: String(formData.get("next") || "") || null,
   });
-  if (!parsed.success) redirect("/login?error=invalid");
+  if (!parsed.success) {
+    return { error: "E-mail inválido. Verifique e tente novamente." };
+  }
 
   await signIn("nodemailer", {
     email: parsed.data.email,
@@ -23,4 +26,5 @@ export async function loginAction(formData: FormData): Promise<void> {
         ? parsed.data.next
         : "/",
   });
+  return { ok: true };
 }
