@@ -29,6 +29,7 @@ model User {
   sessions      Session[]
   consultations Consultation[]
   apiKeys       ApiKey[]
+  subscription  Subscription?
 
   @@index([email])
 }
@@ -164,4 +165,58 @@ model RemovalRequest {
   notes       String?  @db.Text
   createdAt   DateTime @default(now())
   processedAt DateTime?
+}
+
+// Stripe / Mercado Pago billing
+model Subscription {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan              String   // "pro" | "business" | "enterprise"
+  status            String   // active | past_due | canceled | trialing | incomplete
+  provider          String   @default("stripe") // stripe | mercadopago
+  providerCustomerId    String?   // cus_xxx
+  providerSubscriptionId String?  @unique // sub_xxx
+  currentPeriodStart    DateTime?
+  currentPeriodEnd      DateTime?
+  cancelAtPeriodEnd     Boolean   @default(false)
+  trialEnd          DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  invoices          Invoice[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Invoice {
+  id                String   @id @default(cuid())
+  subscriptionId    String
+  subscription      Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  providerInvoiceId String?  @unique
+  amount            Int      // in cents (BRL)
+  currency          String   @default("BRL")
+  status            String   // paid | open | uncollectible | void
+  pdfUrl            String?
+  paidAt            DateTime?
+  createdAt         DateTime @default(now())
+
+  @@index([subscriptionId])
+  @@index([status])
+}
+
+model WebhookEvent {
+  id          String   @id @default(cuid())
+  provider    String   // stripe | mercadopago
+  eventId     String   @unique
+  eventType   String
+  payload     Json
+  processed   Boolean  @default(false)
+  error       String?
+  createdAt   DateTime @default(now())
+  processedAt DateTime?
+
+  @@index([provider, eventType])
+  @@index([processed])
 }

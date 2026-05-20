@@ -7,6 +7,7 @@ import { getSociosByCnpj, qualificacaoLabel, socioSlug } from "@/lib/socios";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { Gate } from "@/components/Gate";
+import { AdSlot } from "@/components/AdSlot";
 import { SITE_URL } from "@/lib/seo";
 import {
   formatCNPJ,
@@ -524,6 +525,9 @@ export default async function EmpresaPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      {/* Ad slot — between content and FAQ (only renders for free users) */}
+      <AdSlot slotId="empresa-mid" format="auto" />
 
       {/* Visible FAQ — matches FAQPage JSON-LD above (Google needs the answers visible in HTML to grant FAQ rich snippet) */}
       <section className="mt-10">

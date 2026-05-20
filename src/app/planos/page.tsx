@@ -66,7 +66,7 @@ const plans = [
       { label: "Acesso à base PGFN (dívidas)", included: false },
       { label: "Integração CRM (webhooks)", included: false },
     ],
-    cta: { label: "Assinar Pro", href: "/cadastro?plano=pro" },
+    cta: { label: "Assinar Pro", href: "/api/billing/checkout?plan=pro" },
     highlight: true,
     badge: "Mais escolhido",
   },
@@ -89,7 +89,7 @@ const plans = [
       { label: "Suporte por WhatsApp em 4h úteis", included: true },
       { label: "Reuniões de onboarding", included: true },
     ],
-    cta: { label: "Assinar Business", href: "/cadastro?plano=business" },
+    cta: { label: "Assinar Business", href: "/api/billing/checkout?plan=business" },
     highlight: false,
   },
   {

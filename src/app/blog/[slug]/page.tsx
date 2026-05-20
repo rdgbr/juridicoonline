@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPost, getRelatedPosts, getAllPosts } from "@/lib/blog";
+import { AdSlot } from "@/components/AdSlot";
 import { SITE_URL } from "@/lib/seo";
 import { Clock, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -54,13 +55,21 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.excerpt,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
+    // Author as schema.org/Person with description + sameAs for E-E-A-T 2026
     author: {
-      "@type": "Organization",
+      "@type": "Person",
       name: post.author.name,
       description: post.author.bio,
+      url: `${SITE_URL}/sobre`,
+      worksFor: {
+        "@type": "Organization",
+        name: "Jurídico Online",
+        url: SITE_URL,
+      },
     },
     publisher: {
       "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
       name: "Jurídico Online",
       logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
     },
@@ -70,6 +79,8 @@ export default async function BlogPostPage({ params }: Props) {
     articleSection: post.category,
     timeRequired: `PT${post.readingMinutes}M`,
     wordCount: post.body.replace(/<[^>]+>/g, "").split(/\s+/).length,
+    inLanguage: "pt-BR",
+    isAccessibleForFree: true,
   };
 
   const breadcrumb = {
@@ -104,18 +115,30 @@ export default async function BlogPostPage({ params }: Props) {
           {post.title}
         </h1>
         <p className="mt-3 text-lg text-slate-600">{post.excerpt}</p>
-        <div className="mt-4 text-sm text-slate-500">
-          Por <strong className="text-slate-700">{post.author.name}</strong> ·{" "}
-          <time>
-            Publicado em{" "}
-            {new Date(post.publishedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
-          </time>
-          {post.updatedAt && post.updatedAt !== post.publishedAt && (
-            <>
-              {" "}· Atualizado em{" "}
-              <time>{new Date(post.updatedAt).toLocaleDateString("pt-BR")}</time>
-            </>
-          )}
+        <div className="mt-5 flex items-center gap-3">
+          <div
+            className="size-10 rounded-full bg-gradient-to-br from-[#0F4C81] to-[#10B981] text-white font-semibold flex items-center justify-center shrink-0"
+            aria-hidden
+          >
+            J
+          </div>
+          <div className="text-sm">
+            <div className="text-slate-900 font-medium">{post.author.name}</div>
+            <div className="text-slate-500 text-xs">
+              <time dateTime={post.publishedAt}>
+                Publicado em{" "}
+                {new Date(post.publishedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
+              </time>
+              {post.updatedAt && post.updatedAt !== post.publishedAt && (
+                <>
+                  {" "}· Atualizado em{" "}
+                  <time dateTime={post.updatedAt}>
+                    {new Date(post.updatedAt).toLocaleDateString("pt-BR")}
+                  </time>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
@@ -124,7 +147,27 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: post.body }}
       />
 
-      <section className="mt-12 pt-8 border-t border-slate-200">
+      {/* Ad slot — after main content, before author bio */}
+      <AdSlot slotId="blog-post-end" format="auto" />
+
+      {/* Author bio card — strong E-E-A-T signal */}
+      <section className="mt-10 pt-6 border-t border-slate-200">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-5 flex items-start gap-4">
+          <div
+            className="size-12 rounded-full bg-gradient-to-br from-[#0F4C81] to-[#10B981] text-white font-semibold flex items-center justify-center shrink-0 text-lg"
+            aria-hidden
+          >
+            J
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold text-slate-900">Sobre o autor</div>
+            <div className="text-sm text-slate-700 mt-0.5 font-medium">{post.author.name}</div>
+            <p className="text-xs text-slate-600 mt-2 leading-relaxed">{post.author.bio}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-8">
         <div className="rounded-2xl bg-gradient-to-br from-[#0F4C81] to-[#0a3a66] p-6 sm:p-8 text-white text-center">
           <h2 className="text-xl font-semibold mb-2">Coloque em prática agora</h2>
           <p className="text-sm text-white/80 max-w-md mx-auto mb-5">

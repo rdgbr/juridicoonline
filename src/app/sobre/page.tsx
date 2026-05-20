@@ -1,69 +1,168 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LegalPage } from "@/components/LegalPage";
+import { Building2, Users, Database, Zap, Shield, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Sobre o Jurídico Online",
   description:
-    "Plataforma de consulta de empresas brasileiras. 65 milhões de CNPJs, dados oficiais da Receita Federal, atualizados diariamente.",
+    "Plataforma brasileira de consulta gratuita de empresas, sócios e CNPJs. 65 milhões de registros oficiais da Receita Federal, atualizados diariamente.",
   alternates: { canonical: "/sobre" },
 };
 
 export default function SobrePage() {
   return (
-    <article className="mx-auto max-w-3xl px-4 sm:px-6 py-12 prose prose-slate">
-      <h1 className="text-4xl font-semibold tracking-tight">Sobre o Jurídico Online</h1>
-
-      <p className="text-lg text-slate-600 mt-4">
-        Somos uma plataforma de consulta gratuita de empresas brasileiras. Indexamos mais de
-        <strong> 65 milhões de CNPJs</strong> com dados oficiais da Receita Federal, cruzados com
-        bases de sócios, CNAEs, juntas comerciais e dados públicos da PGFN.
+    <LegalPage
+      title="Sobre o Jurídico Online"
+      subtitle="A maior base aberta brasileira de consulta de CNPJs, sócios e atividade econômica."
+    >
+      <p>
+        O <strong>Jurídico Online</strong> nasceu em 2026 com uma missão simples:
+        democratizar o acesso a dados públicos de empresas brasileiras. Combinamos a
+        base oficial do CNPJ da Receita Federal (atualizada diariamente) com um motor
+        de busca rápido e gratuito, para que qualquer pessoa — do estudante ao
+        gerente de crédito de um banco — possa consultar uma empresa em segundos.
       </p>
 
-      <h2 className="text-2xl font-semibold mt-10">Nossa missão</h2>
-      <p className="text-slate-600">
-        Democratizar o acesso a informações públicas sobre empresas brasileiras. Vendedores,
-        contadores, recrutadores, jornalistas, advogados e times de cobrança precisam de dados
-        confiáveis sobre empresas todos os dias — e não deveriam pagar fortunas ou esperar APIs
-        burocráticas para isso.
+      <h2>Por que existimos</h2>
+      <p>
+        Dados de pessoa jurídica no Brasil são públicos por força da legislação
+        tributária (Lei nº 5.172/1966 e Decreto nº 9.580/2018). A Receita Federal
+        disponibiliza dumps abertos em{" "}
+        <a href="https://arquivos.receitafederal.gov.br/dados/cnpj/" target="_blank" rel="nofollow noopener">
+          arquivos.receitafederal.gov.br/dados/cnpj/
+        </a>
+        . Mas baixar 50+ GB de CSVs, processar em banco relacional, indexar para busca
+        e manter atualizado todo dia é trabalho que poucos têm condição de fazer.
+        Fazemos esse trabalho pesado e expomos via interface web simples.
       </p>
 
-      <h2 className="text-2xl font-semibold mt-10">De onde vêm os dados</h2>
-      <ul className="text-slate-600 space-y-1.5">
-        <li><strong>Receita Federal</strong> — Cadastro Nacional de Pessoas Jurídicas (CNPJ), atualizado diariamente</li>
-        <li><strong>QSA</strong> — Quadro de Sócios e Administradores, oficial</li>
-        <li><strong>CNAE</strong> — Classificação Nacional de Atividades Econômicas, IBGE</li>
-        <li><strong>Junta Comercial</strong> — Registro de empresas abertas (SP, SC, demais em expansão)</li>
-        <li><strong>Bases públicas</strong> — Endereços, contatos e dados cadastrais públicos</li>
+      <h2>Nossa base de dados em números</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 not-prose my-6">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <Building2 className="h-5 w-5 text-[#0F4C81] mb-2" />
+          <div className="text-2xl font-bold text-slate-900">65,7M</div>
+          <div className="text-xs text-slate-500">CNPJs indexados</div>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <Users className="h-5 w-5 text-[#0F4C81] mb-2" />
+          <div className="text-2xl font-bold text-slate-900">25M+</div>
+          <div className="text-xs text-slate-500">Sócios e administradores</div>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <MapPin className="h-5 w-5 text-[#0F4C81] mb-2" />
+          <div className="text-2xl font-bold text-slate-900">5.570</div>
+          <div className="text-xs text-slate-500">Municípios cobertos</div>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <Database className="h-5 w-5 text-[#0F4C81] mb-2" />
+          <div className="text-2xl font-bold text-slate-900">27</div>
+          <div className="text-xs text-slate-500">Estados (UFs)</div>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <Zap className="h-5 w-5 text-[#0F4C81] mb-2" />
+          <div className="text-2xl font-bold text-slate-900">Diário</div>
+          <div className="text-xs text-slate-500">Frequência de atualização</div>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <Shield className="h-5 w-5 text-[#0F4C81] mb-2" />
+          <div className="text-2xl font-bold text-slate-900">100%</div>
+          <div className="text-xs text-slate-500">Conformidade LGPD</div>
+        </div>
+      </div>
+
+      <h2>O que você pode fazer aqui</h2>
+      <ul>
+        <li>
+          <strong>Consultar qualquer CNPJ</strong> — razão social, nome fantasia,
+          situação cadastral, endereço, capital social, CNAE.
+        </li>
+        <li>
+          <strong>Ver o quadro societário</strong> (QSA) completo, com nome de sócios,
+          qualificação e data de entrada.
+        </li>
+        <li>
+          <strong>Cruzar sócios</strong> — clique no nome de uma pessoa e veja todas
+          as outras empresas onde ela aparece.
+        </li>
+        <li>
+          <strong>Buscar empresas por região</strong> — listas por estado, município
+          ou CNAE.
+        </li>
+        <li>
+          <strong>Comparar 2 empresas</strong> lado a lado.
+        </li>
+        <li>
+          <strong>Listar maiores empresas</strong> por capital social, MEIs, optantes
+          do Simples Nacional.
+        </li>
+        <li>
+          <strong>Baixar datasets</strong> abertos em CSV para análise própria.
+        </li>
+        <li>
+          <strong>API REST</strong> (planos pagos) para integrar nosso banco em
+          sistemas próprios.
+        </li>
       </ul>
 
-      <h2 className="text-2xl font-semibold mt-10">Compromisso com a LGPD</h2>
-      <p className="text-slate-600">
-        Todos os dados que disponibilizamos são <strong>públicos por natureza</strong>, registrados
-        pelas próprias empresas no CNPJ da Receita Federal. Mesmo assim, levamos a LGPD a sério:
-        oferecemos opt-out completo, deletamos dados quando solicitado e nunca vendemos
-        informações pessoais.
-      </p>
-      <p className="text-slate-600">
-        Para mais detalhes, leia nossa <Link href="/privacidade" className="text-[#0F4C81]">Política de Privacidade</Link> e os <Link href="/termos" className="text-[#0F4C81]">Termos de Uso</Link>.
-      </p>
-
-      <h2 className="text-2xl font-semibold mt-10">Modelo de negócio</h2>
-      <p className="text-slate-600">
-        Somos sustentáveis através de:
-      </p>
-      <ul className="text-slate-600 space-y-1.5">
-        <li>Publicidade discreta (Google Adsense) em páginas públicas</li>
-        <li>Planos pagos para usuários com alto volume (export, API, alertas)</li>
-        <li>API REST para integração em SaaS, fintechs e sistemas internos</li>
+      <h2>Quem usa o Jurídico Online</h2>
+      <ul>
+        <li>
+          <strong>Times de vendas B2B</strong> qualificando leads pelo CNPJ
+        </li>
+        <li>
+          <strong>Escritórios contábeis</strong> verificando situação cadastral de
+          clientes
+        </li>
+        <li>
+          <strong>Áreas de cobrança e crédito</strong> fazendo due diligence
+        </li>
+        <li>
+          <strong>RH e recrutamento</strong> validando empresas em vagas
+        </li>
+        <li>
+          <strong>Advogados</strong> em pesquisa preliminar de empresas
+        </li>
+        <li>
+          <strong>Jornalistas e pesquisadores</strong> investigando redes corporativas
+        </li>
+        <li>
+          <strong>Desenvolvedores</strong> consumindo nossa API
+        </li>
       </ul>
-      <p className="text-slate-600">
-        O cadastro grátis é, e sempre será, gratuito.
+
+      <h2>Privacidade e LGPD</h2>
+      <p>
+        Dados de pessoa jurídica (PJ) são públicos. Dados de pessoa física (PF) — como
+        o CPF completo do sócio — <strong>não</strong> são exibidos: aparecem mascarados
+        (ex: <code>***.123.456-**</code>) por força da LGPD (Lei nº 13.709/2018).
+      </p>
+      <p>
+        Se você é sócio(a) de uma empresa e quer reduzir sua visibilidade nos resultados
+        de busca, veja a página{" "}
+        <Link href="/lgpd">LGPD</Link> para os direitos disponíveis e canal de
+        contato com nosso DPO.
       </p>
 
-      <h2 className="text-2xl font-semibold mt-10">Contato</h2>
-      <p className="text-slate-600">
-        Dúvidas, parcerias, imprensa ou solicitações LGPD: <Link href="/contato" className="text-[#0F4C81]">página de contato</Link>.
+      <h2>Como nos contatar</h2>
+      <ul>
+        <li>
+          <strong>Suporte</strong>: contato@juridicoonline.com.br
+        </li>
+        <li>
+          <strong>Comercial / API</strong>: vendas@juridicoonline.com.br
+        </li>
+        <li>
+          <strong>Imprensa</strong>: imprensa@juridicoonline.com.br
+        </li>
+        <li>
+          <strong>DPO (LGPD)</strong>: dpo@juridicoonline.com.br
+        </li>
+      </ul>
+      <p>
+        Você também pode usar o{" "}
+        <Link href="/contato">formulário de contato</Link> para qualquer assunto.
       </p>
-    </article>
+    </LegalPage>
   );
 }

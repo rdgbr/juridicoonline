@@ -1,87 +1,161 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { LegalPage } from "@/components/LegalPage";
 
 export const metadata: Metadata = {
   title: "Termos de Uso",
-  description: "Termos de Uso do Jurídico Online.",
+  description: "Termos de Uso do Jurídico Online — regras de acesso, conta, dados e cancelamento.",
   alternates: { canonical: "/termos" },
 };
 
+const UPDATED = "20 de maio de 2026";
+
 export default function TermosPage() {
   return (
-    <article className="mx-auto max-w-3xl px-4 sm:px-6 py-12">
-      <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Termos de Uso</h1>
-      <p className="text-sm text-slate-500 mt-2">Última atualização: {new Date().toLocaleDateString("pt-BR")}</p>
+    <LegalPage
+      title="Termos de Uso"
+      subtitle="Regras para uso do Jurídico Online. Ao se cadastrar ou usar a plataforma você concorda integralmente com este documento."
+      updatedAt={UPDATED}
+    >
+      <h2>1. Aceitação</h2>
+      <p>
+        Estes Termos de Uso (&quot;Termos&quot;) regulam o relacionamento entre você
+        (&quot;Usuário&quot;) e <strong>Jurídico Online</strong>, operado por seus
+        responsáveis técnicos, ao acessar e usar o site juridicoonline.com.br e
+        serviços associados (&quot;Serviço&quot;). Ao se cadastrar, navegar ou
+        contratar qualquer plano, você declara ter lido, compreendido e aceito
+        integralmente estes Termos.
+      </p>
 
-      <div className="mt-8 space-y-5 text-slate-700 leading-relaxed text-[15px]">
-        <h2 className="text-xl font-semibold mt-8">1. Aceitação</h2>
-        <p>
-          Ao usar o Jurídico Online, você concorda com estes Termos de Uso e com a Política de
-          Privacidade. Se não concordar, não use a plataforma.
-        </p>
+      <h2>2. Objeto do serviço</h2>
+      <p>
+        O Jurídico Online é uma plataforma de consulta e análise de dados públicos
+        de pessoas jurídicas brasileiras, derivados primariamente do Cadastro Nacional
+        da Pessoa Jurídica (CNPJ) mantido pela Receita Federal do Brasil. Oferecemos:
+      </p>
+      <ul>
+        <li>Busca por CNPJ, razão social, nome de sócio ou endereço;</li>
+        <li>Páginas individuais de empresa, sócio, CNAE e localidade;</li>
+        <li>Listagens agregadas (por estado, município, regime tributário);</li>
+        <li>Exportação de dados (CSV) em planos pagos;</li>
+        <li>API REST autenticada em planos pagos;</li>
+        <li>Alertas e relatórios em planos pagos.</li>
+      </ul>
 
-        <h2 className="text-xl font-semibold mt-8">2. Descrição do serviço</h2>
-        <p>
-          O Jurídico Online é uma plataforma de consulta de informações públicas sobre empresas
-          brasileiras, baseada em dados oficiais da Receita Federal e bases públicas.
-        </p>
+      <h2>3. Cadastro e conta</h2>
+      <p>
+        O cadastro é gratuito e exige apenas um e-mail válido. Você é responsável por:
+      </p>
+      <ul>
+        <li>Manter seus dados de cadastro atualizados;</li>
+        <li>Manter a confidencialidade do seu acesso (link mágico ou senha de provedor OAuth);</li>
+        <li>Notificar imediatamente em caso de uso não autorizado da sua conta.</li>
+      </ul>
+      <p>
+        Reservamos o direito de recusar, suspender ou encerrar contas que violem
+        estes Termos, em especial por uso abusivo automatizado (scraping em massa
+        fora dos limites do plano), tentativas de fraude ou descumprimento de
+        legislação aplicável.
+      </p>
 
-        <h2 className="text-xl font-semibold mt-8">3. Cadastro</h2>
-        <p>
-          Para acessar funcionalidades estendidas, é necessário cadastro com e-mail válido. Você é
-          responsável pela veracidade das informações fornecidas e pela segurança da sua conta.
-        </p>
+      <h2>4. Uso permitido</h2>
+      <p>Você pode usar o Serviço para:</p>
+      <ul>
+        <li>Consultar empresas para fins pessoais, profissionais, acadêmicos ou jornalísticos;</li>
+        <li>Prospectar clientes B2B, observando a LGPD e regras de marketing;</li>
+        <li>Realizar due diligence, análise de crédito, recrutamento e seleção;</li>
+        <li>Integrar a API em sistemas próprios dentro dos limites do plano contratado.</li>
+      </ul>
 
-        <h2 className="text-xl font-semibold mt-8">4. Uso permitido</h2>
-        <p>Você pode usar a plataforma para:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Consultar dados de empresas para fins comerciais legítimos;</li>
-          <li>Realizar prospecção, análise de crédito, due diligence;</li>
-          <li>Pesquisas jornalísticas, acadêmicas ou jurídicas.</li>
-        </ul>
+      <h2>5. Uso proibido</h2>
+      <p>É <strong>expressamente proibido</strong>:</p>
+      <ul>
+        <li>Coletar dados em massa via scraping automatizado fora dos limites do plano contratado;</li>
+        <li>Burlar limites de consultas, créditos ou rate limits da API;</li>
+        <li>Revender, redistribuir ou licenciar nossos dados sem autorização expressa;</li>
+        <li>Usar dados obtidos para spam, phishing, fraude ou qualquer prática ilegal;</li>
+        <li>Tentar acessar, modificar ou interferir em sistemas, contas ou dados de outros usuários;</li>
+        <li>Usar engenharia reversa, descompilar ou tentar derivar nosso código-fonte.</li>
+      </ul>
 
-        <h2 className="text-xl font-semibold mt-8">5. Uso proibido</h2>
-        <p>É proibido:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Realizar scraping massivo do site sem autorização (use a API);</li>
-          <li>Usar os dados para spam, fraude, assédio ou prática ilegal;</li>
-          <li>Vender ou redistribuir os dados como base própria;</li>
-          <li>Tentar burlar limites de consulta dos planos gratuitos;</li>
-          <li>Utilizar para discriminar pessoas ou empresas em violação à legislação.</li>
-        </ul>
+      <h2>6. Natureza dos dados</h2>
+      <p>
+        Os dados exibidos derivam de fontes públicas oficiais (Receita Federal,
+        Junta Comercial). Apesar do nosso esforço em manter a base atualizada e
+        precisa, <strong>não garantimos</strong> a inexistência de erros, omissões
+        ou desatualizações pontuais. Decisões críticas (jurídicas, financeiras,
+        contratuais) devem ser baseadas em consulta direta à fonte oficial. O
+        Jurídico Online não se responsabiliza por danos decorrentes do uso de
+        informações desatualizadas ou imprecisas obtidas pela plataforma.
+      </p>
 
-        <h2 className="text-xl font-semibold mt-8">6. Limitação de responsabilidade</h2>
-        <p>
-          Os dados são fornecidos "como estão", baseados em fontes públicas. Não garantimos
-          exatidão, completude ou disponibilidade ininterrupta. Você é responsável pelo uso que
-          faz dos dados consultados.
-        </p>
+      <h2>7. Planos e pagamentos</h2>
+      <p>
+        Os planos pagos são descritos em{" "}
+        <Link href="/planos">/planos</Link>. As condições gerais:
+      </p>
+      <ul>
+        <li>Cobrança recorrente mensal ou anual conforme escolhido no checkout;</li>
+        <li>Cancele a qualquer momento direto no painel <Link href="/perfil">/perfil</Link>, sem multa;</li>
+        <li>O acesso continua até o fim do período pago após o cancelamento;</li>
+        <li>Não há reembolso proporcional após uso do período;</li>
+        <li>Em caso de inadimplência, a conta é rebaixada ao plano Grátis após 7 dias;</li>
+        <li>Mudanças de preço serão comunicadas com 30 dias de antecedência.</li>
+      </ul>
 
-        <h2 className="text-xl font-semibold mt-8">7. Propriedade intelectual</h2>
-        <p>
-          A interface, código, design e marcas do Jurídico Online são protegidos por direitos
-          autorais. Os dados de empresas são públicos e não nos pertencem.
-        </p>
+      <h2>8. Propriedade intelectual</h2>
+      <p>
+        Os dados públicos pertencem ao domínio público (CNPJ, RFB). Os elementos
+        agregados, exibidos e processados pela plataforma (interface, código,
+        organização, marca, design, cruzamentos derivados) são de titularidade do
+        Jurídico Online ou licenciados sob termos próprios.
+      </p>
+      <p>
+        Marca, logotipo e identidade visual são protegidos. Reprodução não
+        autorizada é proibida.
+      </p>
 
-        <h2 className="text-xl font-semibold mt-8">8. Cancelamento</h2>
-        <p>
-          Você pode cancelar sua conta a qualquer momento via página de perfil ou enviando
-          e-mail. Planos pagos serão reembolsados proporcionalmente, conforme regras do plano.
-        </p>
+      <h2>9. Limitação de responsabilidade</h2>
+      <p>
+        Na máxima extensão permitida pela legislação aplicável, o Jurídico Online
+        não responde por danos indiretos, lucros cessantes, perda de dados ou
+        prejuízos decorrentes da indisponibilidade, atraso, erro ou uso indevido
+        do Serviço. Nossa responsabilidade total fica limitada ao valor pago pelo
+        Usuário nos últimos 12 meses.
+      </p>
 
-        <h2 className="text-xl font-semibold mt-8">9. Foro</h2>
-        <p>
-          Estes termos são regidos pela legislação brasileira. Foro de eleição: comarca da sede
-          do Jurídico Online.
-        </p>
+      <h2>10. Suspensão e encerramento</h2>
+      <p>
+        Podemos suspender ou encerrar contas (com ou sem aviso prévio) em casos
+        de violação destes Termos, atividade fraudulenta ou determinação legal.
+        Você pode encerrar sua conta a qualquer momento na página{" "}
+        <Link href="/perfil">/perfil</Link>.
+      </p>
 
-        <h2 className="text-xl font-semibold mt-8">10. Contato</h2>
-        <p>
-          Dúvidas sobre estes termos:{" "}
-          <a href="mailto:contato@juridicoonline.com.br" className="text-[#0F4C81] underline">
-            contato@juridicoonline.com.br
-          </a>
-        </p>
-      </div>
-    </article>
+      <h2>11. Alterações nos Termos</h2>
+      <p>
+        Podemos atualizar estes Termos periodicamente. A versão vigente é sempre a
+        publicada nesta página, com data de última atualização indicada acima.
+        Alterações relevantes serão comunicadas por e-mail ou aviso no painel.
+        O uso continuado do Serviço após atualização implica aceitação.
+      </p>
+
+      <h2>12. Legislação e foro</h2>
+      <p>
+        Estes Termos são regidos pelas leis da República Federativa do Brasil,
+        em especial Código Civil, Marco Civil da Internet (Lei nº 12.965/2014),
+        LGPD (Lei nº 13.709/2018) e Código de Defesa do Consumidor (quando
+        aplicável). Fica eleito o foro da comarca de domicílio do consumidor para
+        dirimir eventuais controvérsias.
+      </p>
+
+      <h2>13. Contato</h2>
+      <p>
+        Dúvidas sobre estes Termos:{" "}
+        <a href="mailto:contato@juridicoonline.com.br">contato@juridicoonline.com.br</a>
+        . Para questões de privacidade ou LGPD:{" "}
+        <a href="mailto:dpo@juridicoonline.com.br">dpo@juridicoonline.com.br</a>.
+      </p>
+    </LegalPage>
   );
 }

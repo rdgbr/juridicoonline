@@ -20,10 +20,22 @@ export type BlogPost = {
   body: string;
 };
 
-const DEFAULT_AUTHOR = {
-  name: "Equipe Jurídico Online",
-  bio: "Time editorial Jurídico Online — especializado em dados públicos do CNPJ, tributário e jurisprudência.",
-};
+/**
+ * Authors with rich bio for E-E-A-T schema.org Person + visual byline.
+ * Add new authors here and reference by slug in posts.
+ */
+export const AUTHORS = {
+  equipe: {
+    slug: "equipe",
+    name: "Equipe Jurídico Online",
+    role: "Time editorial",
+    bio: "Time editorial Jurídico Online — especializado em dados públicos do CNPJ, tributário e direito societário. Curadoria e checagem de fontes oficiais (Receita Federal, Juntas Comerciais, ANPD).",
+    avatarInitial: "J",
+    sameAs: ["https://juridicoonline.com.br"],
+  },
+} as const;
+
+const DEFAULT_AUTHOR = AUTHORS.equipe;
 
 export const POSTS: BlogPost[] = [
   {
