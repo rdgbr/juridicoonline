@@ -1,195 +1,379 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, Sparkles } from "lucide-react";
+import { SITE_URL } from "@/lib/seo";
+import {
+  CheckCircle2,
+  XCircle,
+  Sparkles,
+  Zap,
+  Building2,
+  Crown,
+  ArrowRight,
+  HelpCircle,
+} from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Planos — Jurídico Online",
+  title: "Planos e preços — Consulta CNPJ ilimitada, API REST e exports CSV",
   description:
-    "Cadastro grátis com acesso a 65 milhões de empresas. Planos pagos com export CSV, API, alertas e créditos para integração.",
+    "Comece grátis com 50 consultas/dia. Plano Pro a partir de R$ 49/mês com export CSV, alertas e API. Plano Business para times com integração CRM. Cancele quando quiser.",
   alternates: { canonical: "/planos" },
+  openGraph: {
+    title: "Planos Jurídico Online — a partir de R$ 0",
+    description: "Free para sempre, Pro R$ 49/mês, Business R$ 199/mês.",
+    type: "website",
+  },
 };
 
 const plans = [
   {
+    id: "free",
     name: "Grátis",
-    price: "R$ 0",
+    icon: Sparkles,
+    price: 0,
+    priceLabel: "R$ 0",
     period: "para sempre",
-    desc: "Para usuários ocasionais que precisam consultar empresas",
+    desc: "Consultas pontuais e exploração",
     features: [
-      "Acesso a 65 milhões de empresas",
-      "Telefones e e-mails desbloqueados",
-      "Quadro societário completo",
-      "Newsletter Radar Empresarial",
-      "50 consultas avançadas / mês",
+      { label: "50 consultas de CNPJ por dia", included: true },
+      { label: "Razão social, sócios, endereço, CNAE", included: true },
+      { label: "Telefones e e-mails (com cadastro)", included: true },
+      { label: "Newsletter Radar Empresarial", included: true },
+      { label: "Anúncios discretos", included: true },
+      { label: "Export CSV", included: false },
+      { label: "API REST", included: false },
+      { label: "Alertas de mudança", included: false },
+      { label: "Acesso prioritário (sem ads)", included: false },
     ],
-    cta: "Cadastre-se grátis",
-    href: "/cadastro",
+    cta: { label: "Começar grátis", href: "/cadastro" },
     highlight: false,
   },
   {
+    id: "pro",
     name: "Pro",
-    price: "R$ 29",
-    period: "por mês",
-    desc: "Para vendedores, contadores e profissionais autônomos",
+    icon: Zap,
+    price: 49,
+    priceLabel: "R$ 49",
+    period: "/mês",
+    desc: "Para profissionais autônomos e PMEs",
     features: [
-      "Tudo do Grátis",
-      "500 consultas avançadas / dia",
-      "Export CSV (até 1.000 empresas)",
-      "Filtros avançados (CNAE, capital, porte)",
-      "Alertas de novas empresas por filtro",
-      "Suporte prioritário",
+      { label: "Consultas ilimitadas", included: true },
+      { label: "Tudo do plano Grátis", included: true },
+      { label: "Sem anúncios", included: true },
+      { label: "Export CSV até 5.000 empresas/mês", included: true },
+      { label: "Alertas de mudança (até 50 CNPJs)", included: true },
+      { label: "API: 1.000 chamadas/mês", included: true },
+      { label: "Suporte por e-mail em 24h", included: true },
+      { label: "Acesso à base PGFN (dívidas)", included: false },
+      { label: "Integração CRM (webhooks)", included: false },
     ],
-    cta: "Em breve",
-    href: "#",
+    cta: { label: "Assinar Pro", href: "/cadastro?plano=pro" },
     highlight: true,
-    badge: "Mais popular",
-    soon: true,
+    badge: "Mais escolhido",
   },
   {
+    id: "business",
     name: "Business",
-    price: "R$ 99",
-    period: "por mês",
-    desc: "Para times de prospecção, cobrança e crédito",
+    icon: Building2,
+    price: 199,
+    priceLabel: "R$ 199",
+    period: "/mês",
+    desc: "Equipes de vendas, contabilidade e crédito",
     features: [
-      "Tudo do Pro",
-      "5.000 consultas / dia",
-      "Export CSV ilimitado",
-      "Sócios cruzados (rede societária)",
-      "Histórico de mudanças",
-      "Acesso a dívidas PGFN",
-      "API básica (10k req / mês)",
+      { label: "Tudo do plano Pro", included: true },
+      { label: "Export CSV até 50.000 empresas/mês", included: true },
+      { label: "Alertas ilimitados", included: true },
+      { label: "API: 50.000 chamadas/mês", included: true },
+      { label: "Acesso à base PGFN (dívidas tributárias)", included: true },
+      { label: "Webhooks (CRM, Sheets, Zapier)", included: true },
+      { label: "Multi-usuário (até 5 logins)", included: true },
+      { label: "Suporte por WhatsApp em 4h úteis", included: true },
+      { label: "Reuniões de onboarding", included: true },
     ],
-    cta: "Em breve",
-    href: "#",
+    cta: { label: "Assinar Business", href: "/cadastro?plano=business" },
     highlight: false,
-    soon: true,
   },
   {
-    name: "API",
-    price: "R$ 199+",
-    period: "por mês",
-    desc: "Para devs, fintechs e SaaS que integram consulta CNPJ",
+    id: "enterprise",
+    name: "Enterprise",
+    icon: Crown,
+    price: null,
+    priceLabel: "Sob consulta",
+    period: "",
+    desc: "Bancos, fintechs, grandes corporações",
     features: [
-      "API REST documentada",
-      "50k a 500k requisições / mês",
-      "Webhooks de novas empresas",
-      "SDK Node.js / Python",
-      "SLA 99,9% e suporte dedicado",
-      "Dados batch (até 1M / mês)",
+      { label: "Tudo do plano Business", included: true },
+      { label: "Volume customizado (milhões de consultas)", included: true },
+      { label: "SLA contratual", included: true },
+      { label: "Dump completo de base", included: true },
+      { label: "Dados enriquecidos sob demanda", included: true },
+      { label: "Integração dedicada", included: true },
+      { label: "Treinamento da equipe", included: true },
+      { label: "Suporte 24/7", included: true },
+      { label: "Account manager dedicado", included: true },
     ],
-    cta: "Falar com vendas",
-    href: "/contato?assunto=api",
+    cta: { label: "Falar com vendas", href: "/contato?dept=comercial" },
     highlight: false,
-    soon: true,
   },
 ];
 
+const faq = [
+  {
+    q: "Os dados são oficiais?",
+    a: "Sim. Importamos diariamente os dumps abertos da Receita Federal disponíveis em arquivos.receitafederal.gov.br/dados/cnpj/. São os mesmos dados que aparecem no comprovante oficial — só que pesquisáveis e com sócios cruzados.",
+  },
+  {
+    q: "Posso cancelar a qualquer momento?",
+    a: "Sim, cancele direto no painel /perfil sem custo. O acesso continua até o fim do período pago. Sem multa, sem fidelidade.",
+  },
+  {
+    q: "Qual a diferença entre Pro e Business?",
+    a: "Pro é ideal para 1 pessoa: API limitada (1k/mês), 5k exports/mês, alertas pra 50 CNPJs. Business é para equipes: 50k chamadas de API, 50k exports, alertas ilimitados, multi-usuário e dados de dívidas tributárias (PGFN).",
+  },
+  {
+    q: "Como funciona o limite de 50 consultas/dia no plano grátis?",
+    a: "Cada vez que você abre uma página de empresa ou de sócio, conta como 1 consulta. Buscas na home ou listagens (estados, MEI, etc) não contam. O limite reseta às 00h00 (horário de Brasília).",
+  },
+  {
+    q: "Eu uso para prospecção B2B. É legal?",
+    a: "Sim. Dados de empresas (PJ) são públicos por lei. Para uso comercial, recomendamos respeitar opt-out em campanhas e seguir LGPD para dados de PF (sócios). Consulte nossa página /lgpd.",
+  },
+  {
+    q: "Vocês têm dados de pessoa física?",
+    a: "Não vendemos dados de PF. Os nomes de sócios aparecem mascarados (CPF oculto) conforme a LGPD. Para identificação plena, a empresa precisa autorização específica.",
+  },
+  {
+    q: "Tem desconto para pagamento anual?",
+    a: "Sim. Pagando 12 meses à vista você ganha 2 meses grátis (equivalente a 17% de desconto). Disponível direto no checkout.",
+  },
+  {
+    q: "Posso testar Pro antes de pagar?",
+    a: "Sim — toda nova conta tem 7 dias de Pro grátis automaticamente, sem precisar de cartão. Após 7 dias volta pra Grátis se você não assinar.",
+  },
+];
+
+const features = [
+  { name: "Consultas/dia", values: ["50", "Ilimitado", "Ilimitado", "Customizado"] },
+  { name: "Telefones, e-mails, sócios", values: ["✓", "✓", "✓", "✓"] },
+  { name: "Sem anúncios", values: ["—", "✓", "✓", "✓"] },
+  { name: "Export CSV (empresas/mês)", values: ["—", "5.000", "50.000", "Ilimitado"] },
+  { name: "API REST (chamadas/mês)", values: ["—", "1.000", "50.000", "Customizado"] },
+  { name: "Alertas de mudança", values: ["—", "50 CNPJs", "Ilimitado", "Ilimitado"] },
+  { name: "Dados PGFN (dívidas)", values: ["—", "—", "✓", "✓"] },
+  { name: "Multi-usuário", values: ["—", "—", "5 logins", "Ilimitado"] },
+  { name: "Webhooks (CRM/Sheets)", values: ["—", "—", "✓", "✓"] },
+  { name: "Suporte", values: ["Comunidade", "E-mail 24h", "WhatsApp 4h", "24/7 dedicado"] },
+];
+
 export default function PlanosPage() {
+  // Product/Offer schema for each paid plan
+  const productSchema = plans
+    .filter((p) => p.price !== null && p.price > 0)
+    .map((p) => ({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: `Jurídico Online — Plano ${p.name}`,
+      description: p.desc,
+      brand: { "@type": "Brand", name: "Jurídico Online" },
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "BRL",
+        price: p.price,
+        url: `${SITE_URL}/planos#${p.id}`,
+        availability: "https://schema.org/InStock",
+        priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
+      },
+    }));
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
-      <header className="text-center max-w-2xl mx-auto mb-14">
-        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight">
-          Comece grátis. Cresça quando precisar.
+    <article className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([...productSchema, faqSchema]) }}
+      />
+
+      <header className="text-center mb-12">
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 text-emerald-700 px-3 py-1 text-xs font-medium mb-4">
+          <Sparkles className="h-3.5 w-3.5" /> 7 dias de Pro grátis em qualquer plano
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight">
+          Planos para todo tipo de uso
         </h1>
-        <p className="mt-4 text-lg text-slate-600">
-          Cadastre-se em 30 segundos e tenha acesso a tudo. Quando precisar de mais volume,
-          export ou API, escolha o plano que se encaixa.
+        <p className="mt-4 text-slate-600 max-w-2xl mx-auto">
+          Comece grátis com 50 consultas/dia. Assine quando precisar de API, exports
+          ou volume maior. Cancele a qualquer momento sem multa.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {plans.map((p) => (
-          <div
-            key={p.name}
-            className={`rounded-2xl border p-6 flex flex-col ${
-              p.highlight
-                ? "border-[#0F4C81] bg-gradient-to-b from-[#0F4C81]/5 to-white shadow-lg shadow-[#0F4C81]/10 relative"
-                : "border-slate-200 bg-white"
-            }`}
-          >
-            {p.badge && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0F4C81] text-white text-xs font-medium rounded-full px-3 py-1 inline-flex items-center gap-1">
-                <Sparkles className="h-3 w-3" /> {p.badge}
-              </span>
-            )}
-            <div className="mb-1 text-sm font-semibold text-slate-700">{p.name}</div>
-            <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-3xl font-semibold text-slate-900">{p.price}</span>
-              <span className="text-sm text-slate-500">/{p.period.replace("por ", "")}</span>
-            </div>
-            <p className="text-sm text-slate-500 mb-5 min-h-[40px]">{p.desc}</p>
+      {/* Plans grid */}
+      <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mb-16">
+        {plans.map((plan) => {
+          const Icon = plan.icon;
+          return (
+            <div
+              key={plan.id}
+              id={plan.id}
+              className={`relative rounded-2xl border p-6 flex flex-col ${
+                plan.highlight
+                  ? "border-[#0F4C81] bg-gradient-to-br from-[#0F4C81]/[0.03] to-[#10B981]/[0.03] shadow-lg ring-2 ring-[#0F4C81]/10"
+                  : "border-slate-200 bg-white"
+              }`}
+            >
+              {plan.badge && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-[#0F4C81] text-white text-[11px] font-semibold uppercase tracking-wide">
+                  {plan.badge}
+                </span>
+              )}
 
-            <ul className="space-y-2 text-sm text-slate-700 mb-6 flex-1">
-              {p.features.map((f) => (
-                <li key={f} className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#10B981] mt-0.5 shrink-0" />
-                  <span>{f}</span>
-                </li>
-              ))}
-            </ul>
+              <div className="flex items-center gap-2 mb-3">
+                <Icon className={`h-5 w-5 ${plan.highlight ? "text-[#0F4C81]" : "text-slate-400"}`} />
+                <h2 className="text-lg font-semibold text-slate-900">{plan.name}</h2>
+              </div>
 
-            {p.soon ? (
-              <button
-                disabled
-                className="w-full rounded-lg h-11 font-medium text-sm border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-              >
-                {p.cta}
-              </button>
-            ) : (
+              <p className="text-xs text-slate-500 mb-4 min-h-[2.5rem]">{plan.desc}</p>
+
+              <div className="mb-5">
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {plan.priceLabel}
+                </div>
+                <div className="text-xs text-slate-500 mt-0.5">{plan.period}</div>
+              </div>
+
               <Link
-                href={p.href}
-                className={`w-full rounded-lg h-11 font-medium text-sm inline-flex items-center justify-center transition ${
-                  p.highlight
-                    ? "btn-primary"
-                    : "border border-slate-300 hover:border-[#0F4C81] text-slate-700"
+                href={plan.cta.href}
+                className={`block text-center text-sm rounded-lg h-10 leading-10 font-medium transition mb-5 ${
+                  plan.highlight
+                    ? "bg-[#0F4C81] text-white hover:bg-[#0a3a66]"
+                    : "border border-slate-200 bg-white text-slate-700 hover:border-[#0F4C81] hover:text-[#0F4C81]"
                 }`}
               >
-                {p.cta}
+                {plan.cta.label}
               </Link>
-            )}
-          </div>
-        ))}
-      </div>
 
-      <section className="mt-20 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-semibold tracking-tight text-center mb-8">
-          Perguntas frequentes
+              <ul className="space-y-2 text-sm">
+                {plan.features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    {f.included ? (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                    ) : (
+                      <XCircle className="h-4 w-4 text-slate-300 shrink-0 mt-0.5" />
+                    )}
+                    <span className={f.included ? "text-slate-700" : "text-slate-400 line-through"}>
+                      {f.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </section>
+
+      {/* Comparison table */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold tracking-tight mb-6 text-center">
+          Comparativo completo
         </h2>
-        <div className="space-y-3">
-          <Faq q="O cadastro grátis é mesmo grátis?">
-            Sim. 100% grátis, sem cartão, sem trial expirando. Pedimos apenas e-mail para evitar
-            abuso e enviar a newsletter Radar Empresarial (que você pode cancelar a qualquer momento).
-          </Faq>
-          <Faq q="De onde vêm os dados?">
-            Da Receita Federal (Cadastro Nacional de Pessoas Jurídicas), atualizado diariamente,
-            cruzado com bases públicas de sócios, CNAEs e Junta Comercial.
-          </Faq>
-          <Faq q="É legal disponibilizar telefones e e-mails?">
-            Sim. Todos os dados que mostramos são públicos, registrados na Receita Federal pelas
-            próprias empresas. Tratamos os dados conforme a LGPD e oferecemos opt-out.
-          </Faq>
-          <Faq q="Posso cancelar a qualquer momento?">
-            Sim. Planos pagos são pré-pagos, sem fidelidade. Cancele a qualquer momento e mantenha
-            acesso até o fim do período pago.
-          </Faq>
-          <Faq q="A API tem teste grátis?">
-            Sim. Quando lançarmos, você poderá testar 1.000 requisições grátis. Entre em contato
-            para participar do beta.
-          </Faq>
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr>
+                <th className="px-6 py-4 text-left font-semibold text-slate-700">Recurso</th>
+                {plans.map((p) => (
+                  <th
+                    key={p.id}
+                    className={`px-6 py-4 text-center font-semibold ${
+                      p.highlight ? "text-[#0F4C81] bg-[#0F4C81]/[0.04]" : "text-slate-700"
+                    }`}
+                  >
+                    {p.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {features.map((row) => (
+                <tr key={row.name}>
+                  <td className="px-6 py-3 text-slate-700 font-medium">{row.name}</td>
+                  {row.values.map((v, i) => (
+                    <td
+                      key={i}
+                      className={`px-6 py-3 text-center ${
+                        plans[i]?.highlight ? "bg-[#0F4C81]/[0.04] font-medium" : ""
+                      } ${v === "—" ? "text-slate-300" : v === "✓" ? "text-emerald-600 font-semibold" : "text-slate-700"}`}
+                    >
+                      {v}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
-    </div>
+
+      {/* Social proof / why */}
+      <section className="mb-16 grid md:grid-cols-3 gap-4">
+        <Card title="Dados Receita Federal" desc="Atualizamos diariamente os dumps oficiais. Mesma fonte que comprova CNPJ." />
+        <Card title="Sem fidelidade" desc="Cancele com 1 clique no painel /perfil. Sem multa, sem ligação de retenção." />
+        <Card title="LGPD compliance" desc="PJ é dado público, PF é protegido (CPF mascarado). DPO disponível." />
+      </section>
+
+      {/* FAQ */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold tracking-tight mb-6 text-center flex items-center justify-center gap-2">
+          <HelpCircle className="h-6 w-6 text-[#0F4C81]" />
+          Perguntas frequentes
+        </h2>
+        <div className="max-w-3xl mx-auto rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100">
+          {faq.map((f, i) => (
+            <details key={i} className="group px-6 py-4" open={i < 2}>
+              <summary className="cursor-pointer list-none flex items-start justify-between gap-3 font-medium text-slate-900 text-sm">
+                <span>{f.q}</span>
+                <span className="text-slate-400 group-open:rotate-45 transition text-xl leading-none shrink-0">+</span>
+              </summary>
+              <p className="mt-3 text-sm text-slate-600 leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="rounded-2xl bg-gradient-to-br from-[#0F4C81] to-[#0a3a66] text-white p-8 sm:p-12 text-center">
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+          Pronto pra começar?
+        </h2>
+        <p className="mt-3 text-white/80 max-w-md mx-auto">
+          Crie sua conta grátis em 30 segundos e ganhe 7 dias de Pro automático.
+          Sem cartão, sem compromisso.
+        </p>
+        <Link
+          href="/cadastro"
+          className="mt-6 inline-flex items-center gap-2 bg-[#10B981] hover:bg-[#059669] text-white font-medium rounded-lg px-6 h-11 transition"
+        >
+          Criar conta grátis
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </section>
+    </article>
   );
 }
 
-function Faq({ q, children }: { q: string; children: React.ReactNode }) {
+function Card({ title, desc }: { title: string; desc: string }) {
   return (
-    <details className="rounded-xl border border-slate-200 bg-white px-5 py-4 group">
-      <summary className="cursor-pointer font-medium text-slate-900 list-none flex items-center justify-between">
-        {q}
-        <span className="text-slate-400 group-open:rotate-45 transition text-xl leading-none">+</span>
-      </summary>
-      <div className="mt-3 text-sm text-slate-600 leading-relaxed">{children}</div>
-    </details>
+    <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <CheckCircle2 className="h-5 w-5 text-emerald-500 mb-2" />
+      <h3 className="font-semibold text-slate-900">{title}</h3>
+      <p className="text-sm text-slate-600 mt-1">{desc}</p>
+    </div>
   );
 }

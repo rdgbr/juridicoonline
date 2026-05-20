@@ -74,3 +74,8 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(15, 76, 129, 0.08);
 }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
