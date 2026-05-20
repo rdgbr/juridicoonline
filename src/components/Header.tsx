@@ -13,6 +13,7 @@ export async function Header() {
 
         <nav className="hidden md:flex items-center gap-6 text-sm text-slate-600">
           <Link href="/empresas" className="hover:text-[#0F4C81] transition">Estados</Link>
+          <Link href="/blog" className="hover:text-[#0F4C81] transition">Blog</Link>
           <Link href="/planos" className="hover:text-[#0F4C81] transition">Planos</Link>
           <Link href="/api" className="hover:text-[#0F4C81] transition">API</Link>
           <Link href="/sobre" className="hover:text-[#0F4C81] transition">Sobre</Link>

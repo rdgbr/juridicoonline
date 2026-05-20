@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { SITE_URL } from "@/lib/seo";
 import { UFS } from "@/lib/meili";
+import { getAllPosts } from "@/lib/blog";
 
 export const revalidate = 86400;
 
@@ -9,6 +10,8 @@ export async function GET() {
   const urls: Array<{ url: string; priority: number; freq: string }> = [
     { url: `${SITE_URL}/`, priority: 1.0, freq: "daily" },
     { url: `${SITE_URL}/empresas`, priority: 0.9, freq: "weekly" },
+    { url: `${SITE_URL}/blog`, priority: 0.8, freq: "weekly" },
+    { url: `${SITE_URL}/dados`, priority: 0.7, freq: "weekly" },
     { url: `${SITE_URL}/planos`, priority: 0.7, freq: "monthly" },
     { url: `${SITE_URL}/api`, priority: 0.6, freq: "monthly" },
     { url: `${SITE_URL}/sobre`, priority: 0.5, freq: "monthly" },
@@ -17,6 +20,11 @@ export async function GET() {
     { url: `${SITE_URL}/termos`, priority: 0.3, freq: "yearly" },
     { url: `${SITE_URL}/lgpd`, priority: 0.3, freq: "yearly" },
   ];
+
+  // Blog posts
+  for (const post of getAllPosts()) {
+    urls.push({ url: `${SITE_URL}/blog/${post.slug}`, priority: 0.7, freq: "monthly" });
+  }
 
   for (const u of UFS) {
     urls.push({ url: `${SITE_URL}/empresas/${u.sigla.toLowerCase()}`, priority: 0.8, freq: "daily" });

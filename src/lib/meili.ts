@@ -271,3 +271,32 @@ export async function listFilteredByUF(
   });
   return res.hits;
 }
+
+/**
+ * List empresas opened in a given period (YYYY-MM format).
+ * Used by /empresas-abertas/[uf]/[periodo] landings.
+ */
+export async function listEmpresasAbertasNoPeriodo(
+  uf: string,
+  ano: number,
+  mes: number,
+  limit = 100
+): Promise<{ hits: Empresa[]; total: number }> {
+  const mm = String(mes).padStart(2, "0");
+  const inicio = `${ano}${mm}01`;
+  const fim = `${ano}${mm}31`;
+  const filter: string[] = [
+    `uf = "${uf.toUpperCase()}"`,
+    `data_inicio_atividade >= "${inicio}"`,
+    `data_inicio_atividade <= "${fim}"`,
+  ];
+  const res = await empresasIndex.search<Empresa>("", {
+    limit,
+    filter,
+    sort: ["data_inicio_atividade:desc"],
+  });
+  return {
+    hits: res.hits,
+    total: res.estimatedTotalHits ?? 0,
+  };
+}

@@ -54,10 +54,23 @@ export async function GET(_req: Request, { params }: { params: Promise<{ uf: str
     console.error("[sitemap uf] municipios error", e);
   }
 
-  const now = new Date().toISOString();
+  // Add 3 filter landings per UF (maiores / mei / simples)
+  urls.push(`${SITE_URL}/maiores-empresas/${ufUpper.toLowerCase()}`);
+  urls.push(`${SITE_URL}/empresas-mei/${ufUpper.toLowerCase()}`);
+  urls.push(`${SITE_URL}/empresas-simples/${ufUpper.toLowerCase()}`);
+
+  // Add last 24 months of empresas-abertas (24 landings per UF = 648 total)
+  const now = new Date();
+  for (let i = 1; i <= 24; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const periodo = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    urls.push(`${SITE_URL}/empresas-abertas/${ufUpper.toLowerCase()}/${periodo}`);
+  }
+
+  const nowIso = new Date().toISOString();
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>`).join("\n")}
+${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${nowIso}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>`).join("\n")}
 </urlset>`;
 
   return new NextResponse(xml, {
