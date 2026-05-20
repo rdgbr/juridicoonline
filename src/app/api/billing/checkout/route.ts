@@ -6,8 +6,16 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { createCheckoutSession, type PlanId } from "@/lib/billing";
+import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+/** Build a same-origin absolute URL — never use req.url because behind a proxy
+ *  it resolves to 0.0.0.0:3000 (container bind) which breaks redirects. */
+function publicUrl(path: string): string {
+  const base = SITE_URL.replace(/\/$/, "");
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -38,8 +46,7 @@ export async function GET(req: Request) {
   const userId = (session?.user as { id?: string } | undefined)?.id;
   const email = session?.user?.email;
   if (!userId || !email) {
-    const next = `/login?next=${encodeURIComponent("/planos")}`;
-    return NextResponse.redirect(new URL(next, req.url));
+    return NextResponse.redirect(publicUrl(`/login?next=${encodeURIComponent("/planos")}`));
   }
 
   const url = new URL(req.url);
@@ -47,5 +54,5 @@ export async function GET(req: Request) {
   const plan: PlanId = planParam && ["pro", "business", "enterprise"].includes(planParam) ? planParam : "pro";
 
   const { url: target } = await createCheckoutSession({ userId, email, plan });
-  return NextResponse.redirect(new URL(target, req.url));
+  return NextResponse.redirect(publicUrl(target));
 }

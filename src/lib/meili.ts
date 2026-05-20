@@ -54,12 +54,24 @@ type SearchOpts = {
 
 export async function searchEmpresas(opts: SearchOpts): Promise<SearchResult> {
   try {
-    const res = await empresasIndex.search<Empresa>(opts.q || "", {
+    // Smarter default sort: when user provides a text query (not pure CNPJ),
+    // tiebreak by capital_social desc so the main legal entity (e.g. BANCO DO
+    // BRASIL SA with R$120B capital) ranks above peripheral branches (e.g.
+    // "BANCO DO BRASIL AG SUCURSAL ITALIA"). Meili applies sort AFTER relevance,
+    // so this only changes order between equally-relevant results.
+    let sort = opts.sort;
+    const q = (opts.q || "").trim();
+    const isPureCnpj = q && /^\d{8,14}$/.test(q.replace(/\D/g, ""));
+    if (!sort && q && !isPureCnpj) {
+      sort = ["capital_social:desc"];
+    }
+
+    const res = await empresasIndex.search<Empresa>(q, {
       limit: opts.limit ?? 20,
       offset: opts.offset ?? 0,
       filter: opts.filter,
       facets: opts.facets,
-      sort: opts.sort,
+      sort,
     });
     return {
       hits: res.hits,

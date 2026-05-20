@@ -138,12 +138,18 @@ export function HeaderAuthState() {
             <MenuLink href="/perfil" icon={<UserIcon className="h-4 w-4" />} label="Meu perfil" />
             <MenuLink href="/planos" icon={<CreditCard className="h-4 w-4" />} label="Planos e créditos" />
             {isAdmin && (
-              <MenuLink
+              // Use plain <a> for hard navigation — Link prefetch on a server-gated
+              // page can mis-route on some browsers/extensions, leading to STATUS_ACCESS_VIOLATION
+              <a
                 href="/admin"
-                icon={<Shield className="h-4 w-4 text-amber-600" />}
-                label="Painel admin"
-                className="text-amber-700"
-              />
+                role="menuitem"
+                className="flex items-center gap-2.5 px-4 py-2 text-sm text-amber-700 hover:bg-amber-50 transition"
+              >
+                <span className="text-amber-600">
+                  <Shield className="h-4 w-4" />
+                </span>
+                Painel admin
+              </a>
             )}
             <MenuLink href="/contato" icon={<Mail className="h-4 w-4" />} label="Contato / suporte" />
           </nav>
