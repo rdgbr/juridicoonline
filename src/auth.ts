@@ -59,6 +59,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         (session.user as { id?: string }).id = user.id;
         (session.user as { plan?: string }).plan = (user as { plan?: string }).plan ?? "free";
       }
+      // Expose isAdmin flag for client-side menu rendering
+      const adminEmails = (process.env.ADMIN_EMAIL || "rodrigodgbr1@gmail.com")
+        .split(",")
+        .map((e) => e.trim().toLowerCase());
+      (session as { isAdmin?: boolean }).isAdmin = !!session.user?.email && adminEmails.includes(session.user.email.toLowerCase());
       return session;
     },
   },
