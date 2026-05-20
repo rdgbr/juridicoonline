@@ -66,7 +66,14 @@ export function HeaderAuthState() {
   }
 
   const user = session?.user;
-  const isAdmin = !!session?.isAdmin;
+  // Prefer server-issued flag, but fall back to NEXT_PUBLIC_ADMIN_EMAILS for
+  // existing sessions that don't yet carry the flag (avoids forcing re-login).
+  const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "rodrigodgbr1@gmail.com")
+    .split(",")
+    .map((e) => e.trim().toLowerCase());
+  const isAdmin =
+    !!session?.isAdmin ||
+    (!!user?.email && adminEmails.includes(user.email.toLowerCase()));
 
   if (!user) {
     return (
