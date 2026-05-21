@@ -15,6 +15,11 @@ export async function GET() {
   sitemaps.push(`${SITE_URL}/sitemaps/static`);
   sitemaps.push(`${SITE_URL}/sitemaps/cnae`);
 
+  // Socios sitemaps — 200 pages × 5k = 1M top socios
+  for (let p = 1; p <= 200; p++) {
+    sitemaps.push(`${SITE_URL}/sitemaps/socios/${p}`);
+  }
+
   await Promise.all(
     UFS.map(async (u) => {
       try {

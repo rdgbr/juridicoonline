@@ -11,6 +11,8 @@ export async function GET() {
   const urls: Array<{ url: string; priority: number; freq: string }> = [
     { url: `${SITE_URL}/`, priority: 1.0, freq: "daily" },
     { url: `${SITE_URL}/empresas`, priority: 0.9, freq: "weekly" },
+    { url: `${SITE_URL}/socios`, priority: 0.8, freq: "weekly" },
+    { url: `${SITE_URL}/cnae`, priority: 0.8, freq: "weekly" },
     { url: `${SITE_URL}/blog`, priority: 0.8, freq: "weekly" },
     { url: `${SITE_URL}/dados`, priority: 0.7, freq: "weekly" },
     { url: `${SITE_URL}/planos`, priority: 0.7, freq: "monthly" },

@@ -24,6 +24,8 @@ export function Footer() {
               <li><Link href="/planos" className="hover:text-[#0F4C81]">Planos</Link></li>
               <li><Link href="/api" className="hover:text-[#0F4C81]">API</Link></li>
               <li><Link href="/empresas" className="hover:text-[#0F4C81]">Estados</Link></li>
+              <li><Link href="/socios" className="hover:text-[#0F4C81]">Sócios</Link></li>
+              <li><Link href="/cnae" className="hover:text-[#0F4C81]">CNAEs</Link></li>
               <li><Link href="/abertas-hoje" className="hover:text-[#0F4C81]">Abertas hoje</Link></li>
             </ul>
           </div>
