@@ -527,6 +527,30 @@ export default async function EmpresaPage({ params }: Props) {
         </section>
       )}
 
+      {/* Cross-platform links — Rede Jurídico SEO flywheel */}
+      <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <a
+          href={`https://licitascanner.com.br/buscar?q=${encodeURIComponent(empresa.razao_social)}`}
+          className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 hover:border-[#10B981]/50 hover:bg-[#10B981]/5 transition group"
+        >
+          <span className="size-9 rounded-lg bg-[#10B981]/10 text-[#10B981] inline-flex items-center justify-center flex-shrink-0 text-xs font-bold">LS</span>
+          <div>
+            <div className="text-sm font-semibold text-slate-800 group-hover:text-[#0F4C81]">Licitações de {empresa.razao_social}</div>
+            <div className="text-xs text-slate-500 mt-0.5">Veja editais e pregões públicos em que esta empresa participou ou pode participar — via LicitaScanner.</div>
+          </div>
+        </a>
+        <a
+          href={`https://juridicoempauta.com.br/buscar?q=${encodeURIComponent(empresa.razao_social)}`}
+          className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 hover:border-[#0F4C81]/40 hover:bg-[#0F4C81]/5 transition group"
+        >
+          <span className="size-9 rounded-lg bg-[#0F4C81]/10 text-[#0F4C81] inline-flex items-center justify-center flex-shrink-0 text-xs font-bold">JP</span>
+          <div>
+            <div className="text-sm font-semibold text-slate-800 group-hover:text-[#0F4C81]">Atos oficiais — {empresa.razao_social}</div>
+            <div className="text-xs text-slate-500 mt-0.5">Busque nomeações, contratos e portarias relacionadas a esta empresa em diários oficiais brasileiros.</div>
+          </div>
+        </a>
+      </section>
+
       {/* Ad slot — between content and FAQ (only renders for free users) */}
       <AdSlot slotId="empresa-mid" format="auto" />
 

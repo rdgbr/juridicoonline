@@ -47,6 +47,34 @@ export function Footer() {
           </div>
         </div>
 
+        <div className="mt-8 pt-6 border-t border-slate-200">
+          <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-4">
+            Rede Jurídico
+          </h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a
+              href="https://licitascanner.com.br"
+              className="flex items-start gap-3 rounded-lg border border-slate-200 bg-white p-3 hover:border-[#0F4C81]/40 hover:bg-[#0F4C81]/5 transition group"
+            >
+              <span className="size-8 rounded-md bg-[#10B981]/10 text-[#10B981] inline-flex items-center justify-center flex-shrink-0 text-sm font-bold">LS</span>
+              <div>
+                <div className="text-sm font-medium text-slate-800 group-hover:text-[#0F4C81]">LicitaScanner</div>
+                <div className="text-xs text-slate-500 mt-0.5">Monitore licitações públicas do Brasil (PNCP) — alertas por palavra-chave, CNAE ou cidade.</div>
+              </div>
+            </a>
+            <a
+              href="https://juridicoempauta.com.br"
+              className="flex items-start gap-3 rounded-lg border border-slate-200 bg-white p-3 hover:border-[#0F4C81]/40 hover:bg-[#0F4C81]/5 transition group"
+            >
+              <span className="size-8 rounded-md bg-[#0F4C81]/10 text-[#0F4C81] inline-flex items-center justify-center flex-shrink-0 text-sm font-bold">JP</span>
+              <div>
+                <div className="text-sm font-medium text-slate-800 group-hover:text-[#0F4C81]">Jurídico em Pauta</div>
+                <div className="text-xs text-slate-500 mt-0.5">Diários oficiais municipais e estaduais — atos de nomeação, exoneração, concursos e portarias.</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
         <div className="mt-10 pt-6 border-t border-slate-200">
           <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
             Empresas por estado
