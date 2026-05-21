@@ -109,16 +109,21 @@ export async function getEmpresasBySocio(slug: string): Promise<Array<{ empresa:
     // Get the empresas for these CNPJs from MeiliSearch (we need full data)
     const cnpjsBasicos = [...new Set(socios.map((s) => s.cnpjBasico))];
 
-    // Parallel Meili lookups — all cnpjBasico queries fire concurrently
-    const results = await Promise.all(
-      cnpjsBasicos.slice(0, 50).map((basico) =>
-        empresasIndex.search<Empresa>("", {
-          limit: 1,
-          filter: [`cnpj_completo >= "${basico}0000000"`, `cnpj_completo <= "${basico}9999999"`],
-        }).catch(() => ({ hits: [] as Empresa[] }))
-      )
-    );
-    const empresas: Empresa[] = results.flatMap((r) => r.hits[0] ? [r.hits[0]] : []);
+    // Parallel Meili lookups — cap at 10 concurrent to avoid saturating remote server
+    const empresas: Empresa[] = [];
+    const BATCH = 10;
+    for (let i = 0; i < Math.min(cnpjsBasicos.length, 50); i += BATCH) {
+      const chunk = cnpjsBasicos.slice(i, i + BATCH);
+      const results = await Promise.all(
+        chunk.map((basico) =>
+          empresasIndex.search<Empresa>("", {
+            limit: 1,
+            filter: [`cnpj_completo >= "${basico}0000000"`, `cnpj_completo <= "${basico}9999999"`],
+          }).catch(() => ({ hits: [] as Empresa[] }))
+        )
+      );
+      results.forEach((r) => { if (r.hits[0]) empresas.push(r.hits[0]); });
+    }
 
     // Pair each empresa with its socio
     const pairs: Array<{ empresa: Empresa; socio: Socio }> = [];
