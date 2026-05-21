@@ -42,7 +42,10 @@ ${sitemaps.map((s) => `  <sitemap><loc>${s}</loc><lastmod>${now}</lastmod></site
   return new NextResponse(xml, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": "public, s-maxage=21600, stale-while-revalidate=86400",
+      "Cache-Control": "public, max-age=3600, s-maxage=21600, stale-while-revalidate=86400",
+      "CDN-Cache-Control": "public, max-age=21600",
+      "Cloudflare-CDN-Cache-Control": "public, max-age=21600",
+      Vary: "Accept-Encoding",
     },
   });
 }

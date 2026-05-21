@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SearchBox } from "@/components/SearchBox";
 import { UFS } from "@/lib/meili";
+import { TOP_EMPRESAS, TOP_CNAES, CAPITAIS } from "@/lib/seo-hubs";
 import {
   Building2,
   Users,
@@ -270,6 +271,94 @@ export default function HomePage() {
               >
                 <span className="text-slate-700 group-hover:text-[#0F4C81]">{u.nome}</span>
                 <span className="text-xs text-slate-400 font-mono">{u.sigla}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Top empresas — internal links para páginas-empresa de marcas conhecidas */}
+      <section className="py-20 border-t border-slate-100">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+                Maiores empresas do Brasil
+              </h2>
+              <p className="mt-2 text-slate-600">
+                Consulta direta de CNPJ, sócios, capital social e endereço das principais companhias brasileiras.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+            {TOP_EMPRESAS.map((e) => (
+              <Link
+                key={e.cnpj}
+                href={`/empresa/${e.slug}`}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm hover:border-[#0F4C81] hover:bg-[#0F4C81]/5 transition group"
+              >
+                <div className="font-medium text-slate-800 group-hover:text-[#0F4C81] truncate">{e.nomeShort}</div>
+                <div className="text-[11px] text-slate-400 font-mono truncate">{e.cnpj.slice(0, 8)}…</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Top CNAEs — internal links para hub pages de atividade econômica */}
+      <section className="py-20 bg-slate-50 border-t border-slate-100">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+                Atividades econômicas (CNAE)
+              </h2>
+              <p className="mt-2 text-slate-600">
+                Empresas por setor de atuação. 1.400+ CNAEs catalogados.
+              </p>
+            </div>
+            <Link href="/cnae" className="text-sm text-[#0F4C81] hover:underline font-medium">
+              Ver todos os CNAEs →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {TOP_CNAES.map((c) => (
+              <Link
+                key={c.codigo}
+                href={`/cnae/${c.codigo}`}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm hover:border-[#0F4C81] hover:bg-[#0F4C81]/5 transition flex items-center justify-between gap-2 group"
+              >
+                <span className="text-slate-700 group-hover:text-[#0F4C81] truncate">{c.descricao}</span>
+                <span className="text-[11px] text-slate-400 font-mono shrink-0">{c.codigo}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Capitais brasileiras — internal links para hub pages por cidade */}
+      <section className="py-20 border-t border-slate-100">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-8">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+              Empresas nas capitais brasileiras
+            </h2>
+            <p className="mt-2 text-slate-600">
+              Explore o tecido empresarial das principais cidades do país.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            {CAPITAIS.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/empresas/${c.uf}/${c.slug}`}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm hover:border-[#0F4C81] hover:bg-[#0F4C81]/5 transition group"
+              >
+                <div className="font-medium text-slate-700 group-hover:text-[#0F4C81] truncate">{c.nome}</div>
+                <div className="text-[11px] text-slate-400 uppercase font-mono">{c.uf}</div>
               </Link>
             ))}
           </div>

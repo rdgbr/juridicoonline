@@ -1,4 +1,5 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -107,7 +108,7 @@ export default async function EmpresaPage({ params }: Props) {
   // Canonical redirect: ensure URL matches canonical slug (helps Google consolidate signals)
   const canonicalSlug = empresaSlug(empresa.cnpj_completo, empresa.razao_social);
   if (slug !== canonicalSlug) {
-    redirect(`/empresa/${canonicalSlug}`);
+    permanentRedirect(`/empresa/${canonicalSlug}`);
   }
 
   const session = await auth();

@@ -7,8 +7,9 @@ import { empresasIndex, UFS } from "@/lib/meili";
 import { SITE_URL } from "@/lib/seo";
 import { empresaSlug } from "@/lib/cnpj";
 
+// force-static + revalidate evita Vary: Cookie automático e permite cache no CDN.
 export const revalidate = 86400;
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 type EmpresaLite = {
   cnpj_completo: string;
@@ -62,7 +63,12 @@ ${urls
   return new NextResponse(xml, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": "public, s-maxage=86400",
+      // Cache-Control para clientes; CDN-Cache-Control específico p/ Cloudflare ignorar Vary
+      "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
+      "CDN-Cache-Control": "public, max-age=86400",
+      "Cloudflare-CDN-Cache-Control": "public, max-age=86400",
+      // Sobrescreve o Vary: Cookie default do Next p/ permitir cache CDN
+      Vary: "Accept-Encoding",
     },
   });
 }

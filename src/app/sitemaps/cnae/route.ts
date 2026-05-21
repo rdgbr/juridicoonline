@@ -42,6 +42,12 @@ ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${now}</lastmod><changefreq>we
 </urlset>`;
 
   return new NextResponse(xml, {
-    headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, s-maxage=86400" },
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
+      "CDN-Cache-Control": "public, max-age=86400",
+      "Cloudflare-CDN-Cache-Control": "public, max-age=86400",
+      Vary: "Accept-Encoding",
+    },
   });
 }

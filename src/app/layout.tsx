@@ -104,6 +104,10 @@ export default function RootLayout({
                   "MEI",
                   "Junta Comercial",
                 ],
+                sameAs: [
+                  "https://juridicoempauta.com.br",
+                  "https://licitascanner.com.br",
+                ],
                 contactPoint: [
                   {
                     "@type": "ContactPoint",
