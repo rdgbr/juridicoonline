@@ -182,23 +182,23 @@ export async function getRelatedEmpresas(
   if (empresa.cnae_principal) filters.push(`cnae_principal = "${empresa.cnae_principal}"`);
   filters.push(`cnpj_completo != "${empresa.cnpj_completo}"`);
 
-  // First try same UF + same CNAE + same municipality
-  if (empresa.municipio_nome) {
-    const tight = await empresasIndex.search<Empresa>("", {
-      limit,
-      filter: [...filters, `municipio_nome = "${empresa.municipio_nome}"`],
-      sort: ["capital_social:desc"],
-    });
-    if (tight.hits.length >= 8) return tight.hits;
-  }
+  // Run tight (same municipio) and wide (same UF) in parallel — halves latency
+  const tightPromise = empresa.municipio_nome
+    ? empresasIndex.search<Empresa>("", {
+        limit,
+        filter: [...filters, `municipio_nome = "${empresa.municipio_nome}"`],
+        sort: ["capital_social:desc"],
+      }).catch(() => ({ hits: [] as Empresa[] }))
+    : Promise.resolve({ hits: [] as Empresa[] });
 
-  // Fallback: same UF + same CNAE
-  const wide = await empresasIndex.search<Empresa>("", {
+  const widePromise = empresasIndex.search<Empresa>("", {
     limit,
     filter: filters,
     sort: ["capital_social:desc"],
-  });
-  return wide.hits;
+  }).catch(() => ({ hits: [] as Empresa[] }));
+
+  const [tight, wide] = await Promise.all([tightPromise, widePromise]);
+  return tight.hits.length >= 8 ? tight.hits : wide.hits;
 }
 
 /**

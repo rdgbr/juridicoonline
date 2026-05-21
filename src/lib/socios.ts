@@ -109,21 +109,16 @@ export async function getEmpresasBySocio(slug: string): Promise<Array<{ empresa:
     // Get the empresas for these CNPJs from MeiliSearch (we need full data)
     const cnpjsBasicos = [...new Set(socios.map((s) => s.cnpjBasico))];
 
-    // MeiliSearch only stores full 14-digit CNPJ — we need to fetch by basico prefix
-    // The easiest: search with filter cnpj_completo STARTS WITH cnpjBasico
-    // But Meili doesn't support STARTS WITH on numeric — workaround: a query string match
-    const empresas: Empresa[] = [];
-    for (const basico of cnpjsBasicos.slice(0, 50)) {
-      try {
-        const res = await empresasIndex.search<Empresa>("", {
+    // Parallel Meili lookups — all cnpjBasico queries fire concurrently
+    const results = await Promise.all(
+      cnpjsBasicos.slice(0, 50).map((basico) =>
+        empresasIndex.search<Empresa>("", {
           limit: 1,
           filter: [`cnpj_completo >= "${basico}0000000"`, `cnpj_completo <= "${basico}9999999"`],
-        });
-        if (res.hits[0]) empresas.push(res.hits[0]);
-      } catch {
-        /* skip on filter error */
-      }
-    }
+        }).catch(() => ({ hits: [] as Empresa[] }))
+      )
+    );
+    const empresas: Empresa[] = results.flatMap((r) => r.hits[0] ? [r.hits[0]] : []);
 
     // Pair each empresa with its socio
     const pairs: Array<{ empresa: Empresa; socio: Socio }> = [];

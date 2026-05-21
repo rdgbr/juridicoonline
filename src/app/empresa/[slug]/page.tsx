@@ -164,11 +164,11 @@ export default async function EmpresaPage({ params }: Props) {
   const trendingViews = 200 + (cnpjNum % 4800); // 200-5000 range per company
   const trendingThisWeek = 30 + (cnpjNum % 270); // 30-300 range
 
-  // Related companies (gray-hat: 24 internal links per page = massive SEO juice)
-  const related = await getRelatedEmpresas(empresa, 24);
-
-  // Real socios from RFB QSA data (imported into Postgres)
-  const socios = await getSociosByCnpj(empresa.cnpj_completo);
+  // Parallel fetch: related companies + socios (avoids sequential Meili+PG roundtrips)
+  const [related, socios] = await Promise.all([
+    getRelatedEmpresas(empresa, 24),
+    getSociosByCnpj(empresa.cnpj_completo),
+  ]);
 
   // ─── JSON-LD structured data ─────────────────────────────────
   const jsonLdOrg = {
