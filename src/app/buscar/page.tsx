@@ -33,7 +33,9 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 function buildFilters(sp: SP): string[] {
   const f: string[] = [];
   if (sp.uf) f.push(`uf = "${sp.uf.toUpperCase()}"`);
-  if (sp.situacao) f.push(`situacao = "${sp.situacao.toUpperCase()}"`);
+  // Default to ATIVA unless user explicitly chose another situacao
+  const situacao = sp.situacao?.toUpperCase() || "ATIVA";
+  f.push(`situacao = "${situacao}"`);
   if (sp.porte) f.push(`porte = "${sp.porte.toUpperCase()}"`);
   if (sp.simples === "1") f.push('opcao_simples = "S"');
   if (sp.mei === "1") f.push('opcao_mei = "S"');
@@ -63,14 +65,15 @@ export default async function BuscarPage({ searchParams }: Props) {
         q,
         limit: perPage,
         offset: (page - 1) * perPage,
-        filter: filters.length ? filters : undefined,
+        filter: filters,
+        sort: ["capital_social:desc"],
         facets: ["uf", "situacao", "porte"],
       })
     : { hits: [], estimatedTotalHits: 0, processingTimeMs: 0, query: "" };
 
   const activeFilters = [
     sp.uf && { key: "uf", label: `UF: ${sp.uf.toUpperCase()}` },
-    sp.situacao && { key: "situacao", label: `Situação: ${sp.situacao}` },
+    { key: "situacao", label: `Situação: ${(sp.situacao || "ATIVA")}` },
     sp.porte && { key: "porte", label: `Porte: ${sp.porte}` },
     sp.simples === "1" && { key: "simples", label: "Simples Nacional" },
     sp.mei === "1" && { key: "mei", label: "MEI" },
