@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SITE_URL } from "@/lib/seo";
 import { getEmpresasBySocio, qualificacaoLabel } from "@/lib/socios";
-import { empresaSlug, formatCNPJ } from "@/lib/cnpj";
+import { empresaSlug, formatCNPJ, razaoSocialDisplay } from "@/lib/cnpj";
 import { Building2, User, ArrowRight } from "lucide-react";
 
 export const revalidate = 86400;
@@ -11,18 +11,16 @@ export const revalidate = 86400;
 type Props = { params: Promise<{ slug: string }> };
 
 function unslug(slug: string): string {
-  return slug
-    .replace(/-/g, " ")
-    .split(" ")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-    .join(" ");
+  // Reaproveita razaoSocialDisplay para tratar preposições (da/de/dos/etc) corretamente
+  return razaoSocialDisplay(slug.replace(/-/g, " "));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const nome = unslug(slug);
+  // Template do layout adiciona " | Jurídico Online" — não duplicar
   return {
-    title: `${nome} — Sócio e Empresas | Jurídico Online`,
+    title: `${nome} - Sócio e empresas no CNPJ`,
     description: `Veja as empresas em que ${nome} é sócio, administrador ou representante legal. Consulte CNPJ, situação cadastral, endereço e quadro societário completo.`,
     alternates: { canonical: `/socio/${slug}` },
     openGraph: { title: `${nome} — Sócio`, type: "profile" },

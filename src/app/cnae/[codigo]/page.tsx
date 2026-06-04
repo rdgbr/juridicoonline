@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { topByCnae, UFS, ufNome } from "@/lib/meili";
 import { SITE_URL } from "@/lib/seo";
-import { empresaSlug, formatCNPJ, formatCurrency } from "@/lib/cnpj";
+import { empresaSlug, formatCNPJ, formatCurrency, razaoSocialDisplay } from "@/lib/cnpj";
 import { Building2, MapPin, ArrowRight } from "lucide-react";
 
 export const revalidate = 86400; // 1 day
@@ -16,9 +16,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (clean.length < 5) return { title: "CNAE não encontrado" };
 
   const empresas = await topByCnae(clean, undefined, 1);
-  const descricao = empresas[0]?.cnae_descricao || `CNAE ${clean}`;
+  const descricaoRaw = empresas[0]?.cnae_descricao || `CNAE ${clean}`;
+  const descricao = razaoSocialDisplay(descricaoRaw) || descricaoRaw;
 
-  const title = `${descricao} (CNAE ${clean}) — Empresas no Brasil`;
+  const title = `${descricao} (CNAE ${clean}) - Empresas no Brasil`;
   const description = `Lista de empresas com atividade econômica ${descricao} (CNAE ${clean}) no Brasil. Consulte CNPJ, endereço, sócios e situação cadastral. Atualizado hoje.`;
 
   return {

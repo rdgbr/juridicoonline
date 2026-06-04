@@ -16,6 +16,16 @@ const geistMono = Geist_Mono({
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://juridicoonline.com.br";
 
+// Cloudflare Web Analytics — sem PII, sem cookies, free. Token vem do dashboard:
+//   dash.cloudflare.com → Analytics → Web Analytics → Add a site → token JSON
+// Sem token, o beacon não é renderizado (zero overhead).
+const CF_ANALYTICS_TOKEN = process.env.NEXT_PUBLIC_CF_ANALYTICS_TOKEN || "";
+// Bing Webmaster verification — meta tag pra ativar a propriedade
+// (Bing Webmaster Tools → Add site → HTML meta tag)
+const BING_VERIFY = process.env.NEXT_PUBLIC_BING_VERIFY || "";
+// Yandex Webmaster — só registra propriedade
+const YANDEX_VERIFY = process.env.NEXT_PUBLIC_YANDEX_VERIFY || "";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -52,6 +62,14 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: "/" },
+  // Verificações de webmaster: Bing e Yandex (Google já é via DNS TXT).
+  // Os valores vêm de env vars; se vazias, a tag fica vazia mas inofensiva.
+  verification: {
+    other: {
+      ...(BING_VERIFY ? { "msvalidate.01": BING_VERIFY } : {}),
+      ...(YANDEX_VERIFY ? { "yandex-verification": YANDEX_VERIFY } : {}),
+    },
+  },
 };
 
 export const viewport = {
@@ -157,6 +175,15 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        {/* Cloudflare Web Analytics — só carrega se token configurado.
+            defer = não bloqueia LCP. Sem cookies, sem PII, LGPD-safe. */}
+        {CF_ANALYTICS_TOKEN && (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={`{"token": "${CF_ANALYTICS_TOKEN}"}`}
+          />
+        )}
       </body>
     </html>
   );

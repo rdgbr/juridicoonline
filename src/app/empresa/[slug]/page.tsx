@@ -22,6 +22,7 @@ import {
   maskPhone,
   maskEmail,
   onlyDigits,
+  razaoSocialDisplay,
 } from "@/lib/cnpj";
 import {
   Building2,
@@ -48,12 +49,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const cnpjFmt = formatCNPJ(empresa.cnpj_completo);
   const cidade = empresa.municipio_nome ? `${empresa.municipio_nome}/${empresa.uf}` : empresa.uf;
+  const razaoCase = razaoSocialDisplay(empresa.razao_social) || empresa.razao_social;
 
-  // Title stuffing: razão social + CNPJ + fantasia + cidade + atualizado hoje (keyword density)
   const fantasiaPart = empresa.nome_fantasia && empresa.nome_fantasia !== empresa.razao_social ? ` (${empresa.nome_fantasia})` : "";
-  const title = `${empresa.razao_social}${fantasiaPart} — CNPJ ${cnpjFmt} · ${cidade} · Atualizado Hoje`;
 
-  const description = `Consulta CNPJ ${cnpjFmt} de ${empresa.razao_social}${fantasiaPart}: ${empresa.cnae_descricao || empresa.cnae_principal || ""}, endereço em ${cidade}, telefones, e-mail, sócios, capital social, situação cadastral. Dados oficiais Receita Federal, atualizado hoje. Grátis.`;
+  // CTR-optimized title: title case + cidade/UF; "%s | Jurídico Online" vem do template do layout.
+  // Se razão social for longa, omite cidade para evitar truncamento (>60 chars).
+  const baseTitle = `${razaoCase} - CNPJ ${cnpjFmt}`;
+  const title = baseTitle.length <= 50 ? `${baseTitle} (${cidade})` : baseTitle;
+
+  const description = `Consulta CNPJ ${cnpjFmt} de ${razaoCase}${fantasiaPart}: ${empresa.cnae_descricao || empresa.cnae_principal || ""}, endereço em ${cidade}, telefones, e-mail, sócios, capital social, situação cadastral. Dados oficiais Receita Federal, atualizado hoje. Grátis.`;
 
   // Keywords stuffing — Google ignora meta keywords mas Bing/Yandex ainda usam
   const keywords = [
@@ -141,6 +146,10 @@ export default async function EmpresaPage({ params }: Props) {
   }
 
   const cnpjFmt = formatCNPJ(empresa.cnpj_completo);
+  // Title case da razão social/fantasia: usado em H1, breadcrumb, FAQ, schemas.
+  // CAIXA ALTA reduz CTR e parece spam pro Google. O `||` mantém fallback.
+  const razaoDisp = razaoSocialDisplay(empresa.razao_social) || empresa.razao_social;
+  const fantasiaDisp = empresa.nome_fantasia ? (razaoSocialDisplay(empresa.nome_fantasia) || empresa.nome_fantasia) : "";
   const ativo = empresa.situacao === "ATIVA";
   const endereco = [
     empresa.tipo_logradouro,
@@ -153,6 +162,8 @@ export default async function EmpresaPage({ params }: Props) {
 
   const canonicalUrl = `${SITE_URL}/empresa/${canonicalSlug}`;
   const cidadeStr = empresa.municipio_nome ? `${empresa.municipio_nome}/${empresa.uf}` : (empresa.uf || "Brasil");
+  // CNAE descrição vem do MeiliSearch em CAIXA ALTA — converter pra title case para H1/H2 visíveis
+  const cnaeDescDisp = empresa.cnae_descricao ? (razaoSocialDisplay(empresa.cnae_descricao) || empresa.cnae_descricao) : "";
 
   // Freshness signal: actualizado HOJE (renderizado fresh por ISR diária)
   const hoje = new Date();
@@ -174,8 +185,8 @@ export default async function EmpresaPage({ params }: Props) {
   const jsonLdOrg = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: empresa.razao_social,
-    alternateName: empresa.nome_fantasia || undefined,
+    name: razaoDisp,
+    alternateName: fantasiaDisp || undefined,
     taxID: cnpjFmt,
     url: canonicalUrl,
     foundingDate: empresa.data_inicio_atividade || undefined,
@@ -205,7 +216,7 @@ export default async function EmpresaPage({ params }: Props) {
       ...(empresa.uf
         ? [{ "@type": "ListItem", position: 3, name: ufNome(empresa.uf), item: `${SITE_URL}/empresas/${empresa.uf.toLowerCase()}` }]
         : []),
-      { "@type": "ListItem", position: empresa.uf ? 4 : 3, name: empresa.razao_social, item: canonicalUrl },
+      { "@type": "ListItem", position: empresa.uf ? 4 : 3, name: razaoDisp, item: canonicalUrl },
     ],
   };
 
@@ -213,7 +224,7 @@ export default async function EmpresaPage({ params }: Props) {
   const jsonLdLocalBusiness = empresa.uf && empresa.municipio_nome ? {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: empresa.razao_social,
+    name: razaoDisp,
     "@id": canonicalUrl,
     image: `${SITE_URL}/api/og?cnpj=${empresa.cnpj_completo}`,
     url: canonicalUrl,
@@ -236,27 +247,27 @@ export default async function EmpresaPage({ params }: Props) {
     mainEntity: [
       {
         "@type": "Question",
-        name: `Qual é o CNPJ de ${empresa.razao_social}?`,
-        acceptedAnswer: { "@type": "Answer", text: `O CNPJ de ${empresa.razao_social} é ${cnpjFmt}. Situação cadastral: ${empresa.situacao || "não informada"}.` },
+        name: `Qual é o CNPJ de ${razaoDisp}?`,
+        acceptedAnswer: { "@type": "Answer", text: `O CNPJ de ${razaoDisp} é ${cnpjFmt}. Situação cadastral: ${empresa.situacao || "não informada"}.` },
       },
       {
         "@type": "Question",
-        name: `Onde fica ${empresa.razao_social}?`,
-        acceptedAnswer: { "@type": "Answer", text: `${empresa.razao_social} está localizada em ${cidadeStr}${empresa.cep ? `, CEP ${formatCEP(empresa.cep)}` : ""}.` },
+        name: `Onde fica ${razaoDisp}?`,
+        acceptedAnswer: { "@type": "Answer", text: `${razaoDisp} está localizada em ${cidadeStr}${empresa.cep ? `, CEP ${formatCEP(empresa.cep)}` : ""}.` },
       },
       {
         "@type": "Question",
-        name: `Quando ${empresa.razao_social} foi aberta?`,
+        name: `Quando ${razaoDisp} foi aberta?`,
         acceptedAnswer: { "@type": "Answer", text: empresa.data_inicio_atividade ? `Atividade iniciada em ${formatDate(empresa.data_inicio_atividade)} (${age(empresa.data_inicio_atividade)} de operação).` : "Data de abertura não informada." },
       },
       {
         "@type": "Question",
-        name: `Qual é a atividade econômica de ${empresa.razao_social}?`,
-        acceptedAnswer: { "@type": "Answer", text: empresa.cnae_descricao ? `CNAE principal: ${empresa.cnae_principal} — ${empresa.cnae_descricao}.` : "Atividade econômica não informada." },
+        name: `Qual é a atividade econômica de ${razaoDisp}?`,
+        acceptedAnswer: { "@type": "Answer", text: cnaeDescDisp ? `CNAE principal: ${empresa.cnae_principal} — ${cnaeDescDisp}.` : "Atividade econômica não informada." },
       },
       {
         "@type": "Question",
-        name: `${empresa.razao_social} é optante pelo Simples Nacional?`,
+        name: `${razaoDisp} é optante pelo Simples Nacional?`,
         acceptedAnswer: { "@type": "Answer", text: empresa.opcao_simples === "SIM" ? "Sim, é optante pelo Simples Nacional." : "Não consta como optante pelo Simples Nacional." },
       },
     ],
@@ -301,7 +312,7 @@ export default async function EmpresaPage({ params }: Props) {
             </>
           )}
           <li>/</li>
-          <li className="text-slate-700 truncate max-w-[40ch]">{empresa.razao_social}</li>
+          <li className="text-slate-700 truncate max-w-[40ch]">{razaoDisp}</li>
         </ol>
       </nav>
 
@@ -325,10 +336,10 @@ export default async function EmpresaPage({ params }: Props) {
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
-              {empresa.razao_social}
+              {razaoDisp}
             </h1>
-            {empresa.nome_fantasia && empresa.nome_fantasia !== empresa.razao_social && (
-              <p className="text-base text-slate-600 mt-1">{empresa.nome_fantasia}</p>
+            {fantasiaDisp && empresa.nome_fantasia !== empresa.razao_social && (
+              <p className="text-base text-slate-600 mt-1">{fantasiaDisp}</p>
             )}
             <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm text-slate-600">
               <span><span className="text-slate-400">CNPJ:</span> <strong className="font-mono text-slate-900">{cnpjFmt}</strong></span>
@@ -346,8 +357,8 @@ export default async function EmpresaPage({ params }: Props) {
           <div className="text-sm text-slate-700">
             <span className="font-mono text-slate-900">{empresa.cnae_principal || "—"}</span>
           </div>
-          {empresa.cnae_descricao && (
-            <div className="text-sm text-slate-600 mt-1">{empresa.cnae_descricao}</div>
+          {cnaeDescDisp && (
+            <div className="text-sm text-slate-600 mt-1">{cnaeDescDisp}</div>
           )}
         </InfoCard>
 
@@ -484,7 +495,7 @@ export default async function EmpresaPage({ params }: Props) {
       {related.length > 0 && (
         <section className="mt-10">
           <h2 className="text-xl font-semibold tracking-tight mb-4">
-            Outras empresas {empresa.cnae_descricao ? <>de <span className="text-[#0F4C81]">{empresa.cnae_descricao}</span></> : null}
+            Outras empresas {cnaeDescDisp ? <>de <span className="text-[#0F4C81]">{cnaeDescDisp}</span></> : null}
             {empresa.municipio_nome && <> em {empresa.municipio_nome}/{empresa.uf}</>}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -495,7 +506,7 @@ export default async function EmpresaPage({ params }: Props) {
                 className="rounded-lg border border-slate-200 bg-white px-3 py-2 hover:border-[#0F4C81] hover:shadow-sm transition group"
               >
                 <div className="text-sm font-medium text-slate-900 group-hover:text-[#0F4C81] truncate">
-                  {r.razao_social}
+                  {razaoSocialDisplay(r.razao_social) || r.razao_social}
                 </div>
                 <div className="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
                   <span className="font-mono">{formatCNPJ(r.cnpj_completo).slice(0, 10)}…</span>
@@ -535,7 +546,7 @@ export default async function EmpresaPage({ params }: Props) {
         >
           <span className="size-9 rounded-lg bg-[#10B981]/10 text-[#10B981] inline-flex items-center justify-center flex-shrink-0 text-xs font-bold">LS</span>
           <div>
-            <div className="text-sm font-semibold text-slate-800 group-hover:text-[#0F4C81]">Licitações de {empresa.razao_social}</div>
+            <div className="text-sm font-semibold text-slate-800 group-hover:text-[#0F4C81]">Licitações de {razaoDisp}</div>
             <div className="text-xs text-slate-500 mt-0.5">Veja editais e pregões públicos em que esta empresa participou ou pode participar — via LicitaScanner.</div>
           </div>
         </a>
@@ -545,7 +556,7 @@ export default async function EmpresaPage({ params }: Props) {
         >
           <span className="size-9 rounded-lg bg-[#0F4C81]/10 text-[#0F4C81] inline-flex items-center justify-center flex-shrink-0 text-xs font-bold">JP</span>
           <div>
-            <div className="text-sm font-semibold text-slate-800 group-hover:text-[#0F4C81]">Atos oficiais — {empresa.razao_social}</div>
+            <div className="text-sm font-semibold text-slate-800 group-hover:text-[#0F4C81]">Atos oficiais — {razaoDisp}</div>
             <div className="text-xs text-slate-500 mt-0.5">Busque nomeações, contratos e portarias relacionadas a esta empresa em diários oficiais brasileiros.</div>
           </div>
         </a>
@@ -556,7 +567,7 @@ export default async function EmpresaPage({ params }: Props) {
 
       {/* Visible FAQ — matches FAQPage JSON-LD above (Google needs the answers visible in HTML to grant FAQ rich snippet) */}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold tracking-tight mb-4">Perguntas frequentes sobre {empresa.razao_social}</h2>
+        <h2 className="text-xl font-semibold tracking-tight mb-4">Perguntas frequentes sobre {razaoDisp}</h2>
         <div className="rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100">
           {(jsonLdFaq.mainEntity as Array<{ name: string; acceptedAnswer: { text: string } }>).map((q, i) => (
             <details key={i} className="group px-5 py-4" {...(i === 0 ? { open: true } : {})}>

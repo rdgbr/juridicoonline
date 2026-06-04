@@ -21,8 +21,11 @@ export const metadata: Metadata = {
 type SocioRow = { nomeSlug: string; nome: string; cnt: number };
 
 async function getTopSocios(limit = 120): Promise<SocioRow[]> {
+  // Query pesada em 27M rows. Promise.race com timeout 45s garante que o build
+  // não fica preso — se a query demorar, fallback vazio e página renderiza sem a seção.
+  const TIMEOUT_MS = 45_000;
   try {
-    const rows = await prisma.$queryRaw<SocioRow[]>`
+    const query = prisma.$queryRaw<SocioRow[]>`
       SELECT "nomeSlug", nome, COUNT(*)::int AS cnt
       FROM "Socio"
       WHERE LENGTH("nomeSlug") > 10
@@ -36,7 +39,8 @@ async function getTopSocios(limit = 120): Promise<SocioRow[]> {
       ORDER BY cnt DESC
       LIMIT ${limit}
     `;
-    return rows;
+    const timeout = new Promise<SocioRow[]>((resolve) => setTimeout(() => resolve([]), TIMEOUT_MS));
+    return await Promise.race([query, timeout]);
   } catch {
     return [];
   }

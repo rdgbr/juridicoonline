@@ -15,6 +15,7 @@ export async function GET() {
     { url: `${SITE_URL}/cnae`, priority: 0.8, freq: "weekly" },
     { url: `${SITE_URL}/blog`, priority: 0.8, freq: "weekly" },
     { url: `${SITE_URL}/dados`, priority: 0.7, freq: "weekly" },
+    { url: `${SITE_URL}/comparar`, priority: 0.8, freq: "weekly" },
     { url: `${SITE_URL}/planos`, priority: 0.7, freq: "monthly" },
     { url: `${SITE_URL}/api`, priority: 0.6, freq: "monthly" },
     { url: `${SITE_URL}/sobre`, priority: 0.5, freq: "monthly" },
@@ -30,7 +31,13 @@ export async function GET() {
   }
 
   for (const u of UFS) {
-    urls.push({ url: `${SITE_URL}/empresas/${u.sigla.toLowerCase()}`, priority: 0.8, freq: "daily" });
+    const ufLow = u.sigla.toLowerCase();
+    urls.push({ url: `${SITE_URL}/empresas/${ufLow}`, priority: 0.8, freq: "daily" });
+    // Doorway pages por UF — uma landing por filtro × 27 estados
+    urls.push({ url: `${SITE_URL}/maiores-empresas/${ufLow}`, priority: 0.7, freq: "weekly" });
+    urls.push({ url: `${SITE_URL}/empresas-mei/${ufLow}`, priority: 0.7, freq: "weekly" });
+    urls.push({ url: `${SITE_URL}/empresas-simples/${ufLow}`, priority: 0.7, freq: "weekly" });
+    urls.push({ url: `${SITE_URL}/empresas-baixadas/${ufLow}`, priority: 0.6, freq: "monthly" });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

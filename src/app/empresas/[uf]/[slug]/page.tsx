@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { UFS, ufNome, listByUF, topByCnae } from "@/lib/meili";
 import { SITE_URL } from "@/lib/seo";
-import { empresaSlug, formatCNPJ, formatCurrency } from "@/lib/cnpj";
+import { empresaSlug, formatCNPJ, formatCurrency, razaoSocialDisplay } from "@/lib/cnpj";
 import { Building2, MapPin } from "lucide-react";
 
 export const revalidate = 86400;
@@ -28,9 +28,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (isCnae(slug)) {
     const empresas = await topByCnae(slug, ufUpper, 1);
-    const descricao = empresas[0]?.cnae_descricao || `CNAE ${slug}`;
+    const descricaoRaw = empresas[0]?.cnae_descricao || `CNAE ${slug}`;
+    const descricao = razaoSocialDisplay(descricaoRaw) || descricaoRaw;
     const ufName = ufNome(ufUpper);
-    const title = `${descricao} em ${ufName} (${ufUpper}) — Empresas CNAE ${slug}`;
+    const title = `${descricao} em ${ufName} (${ufUpper}) - CNAE ${slug}`;
     return {
       title,
       description: `Lista de empresas com atividade ${descricao} em ${ufName}. CNPJ, endereço, sócios e situação cadastral. Atualizado hoje.`.slice(0, 160),

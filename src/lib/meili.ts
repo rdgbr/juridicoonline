@@ -262,10 +262,12 @@ export async function countNewCompanies(uf?: string, days = 7): Promise<number> 
  */
 export async function listFilteredByUF(
   uf: string,
-  filterType: "maiores" | "mei" | "simples",
+  filterType: "maiores" | "mei" | "simples" | "baixada",
   limit = 100
 ): Promise<Empresa[]> {
-  const filter: string[] = [`uf = "${uf.toUpperCase()}"`, 'situacao = "ATIVA"'];
+  // BAIXADA pede situacao diferente; demais usam ATIVA
+  const situacao = filterType === "baixada" ? "BAIXADA" : "ATIVA";
+  const filter: string[] = [`uf = "${uf.toUpperCase()}"`, `situacao = "${situacao}"`];
   let sort: string[] = ["capital_social:desc"];
 
   if (filterType === "mei") {
@@ -273,6 +275,9 @@ export async function listFilteredByUF(
     sort = ["data_inicio_atividade:desc"];
   } else if (filterType === "simples") {
     filter.push('opcao_simples = "S"');
+    sort = ["capital_social:desc"];
+  } else if (filterType === "baixada") {
+    // Empresas baixadas: prioriza as maiores (mais buscadas)
     sort = ["capital_social:desc"];
   }
 

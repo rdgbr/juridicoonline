@@ -74,6 +74,35 @@ export function maskEmail(email: string | null | undefined): string {
   return `${visible}${"*".repeat(Math.max(3, u.length - 2))}@${d}`;
 }
 
+// Converte razão social "PATIO DE VEICULOS SUPREMA LTDA" → "Patio de Veiculos Suprema LTDA".
+// Preserva siglas societárias em maiúsculas, abaixa preposições/conjunções.
+// Usado em <title>, OG e exibição — caixa alta reduz CTR ~15-20%.
+const RAZAO_KEEP_UPPER = new Set([
+  "LTDA", "ME", "EPP", "MEI", "EIRELI", "S/A", "S.A", "SA", "ESQ",
+  "EI", "SS", "SLU", "SLP", "SCP", "EPI", "OAB", "CNPJ", "CPF", "ON",
+]);
+const RAZAO_LOWER = new Set([
+  "da", "de", "do", "das", "dos", "e", "em", "na", "no", "nas", "nos", "para", "por",
+]);
+export function razaoSocialDisplay(razao: string | null | undefined): string {
+  if (!razao) return "";
+  const tokens = razao.trim().split(/\s+/);
+  return tokens
+    .map((tok, i) => {
+      // Sigla pontuada tipo "M.E.T.", "S.A.", "C.E.O" — preserva caixa alta original
+      const letters = tok.replace(/[.,;:]/g, "");
+      const isDottedAcronym = /\./.test(tok) && /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÜÇ]+$/.test(letters) && letters.length <= 5;
+      if (isDottedAcronym) return tok.toUpperCase();
+      const cleaned = tok.replace(/[.,;:]$/g, ""); // só pontuação à direita
+      if (RAZAO_KEEP_UPPER.has(cleaned.toUpperCase())) return cleaned.toUpperCase() + tok.slice(cleaned.length);
+      const lower = cleaned.toLowerCase();
+      if (i > 0 && RAZAO_LOWER.has(lower)) return lower + tok.slice(cleaned.length);
+      // Capitaliza preservando hífens e apóstrofos: "d'agua" → "D'Agua"
+      return lower.replace(/(^|[\s\-'])([a-záàâãéêíóôõúüç])/g, (_, sep, ch) => sep + ch.toUpperCase()) + tok.slice(cleaned.length);
+    })
+    .join(" ");
+}
+
 export function age(dataInicio: string | null | undefined): string {
   if (!dataInicio || dataInicio.length !== 8) return "";
   const y = parseInt(dataInicio.slice(0, 4));
