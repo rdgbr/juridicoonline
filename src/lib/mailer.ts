@@ -18,6 +18,10 @@ type SendOpts = {
   from?: string;
   replyTo?: string;
   tags?: string[];
+  /** Set to false to disable Mailgun click-tracking for this email.
+   *  Useful for magic-link emails where the tracking domain may lack SSL
+   *  and the token is one-time-use anyway (CTR is always 100%). */
+  trackClicks?: boolean;
 };
 
 export async function sendEmail({
@@ -28,6 +32,7 @@ export async function sendEmail({
   from = FROM,
   replyTo,
   tags = [],
+  trackClicks = true,
 }: SendOpts): Promise<{ ok: boolean; id?: string; error?: string }> {
   if (!API_KEY) {
     console.warn("[mailer] MAILGUN_API_KEY not set — skipping send", { to, subject });
@@ -42,7 +47,7 @@ export async function sendEmail({
   if (replyTo) body.set("h:Reply-To", replyTo);
   for (const t of tags) body.append("o:tag", t);
   body.set("o:tracking", "yes");
-  body.set("o:tracking-clicks", "yes");
+  body.set("o:tracking-clicks", trackClicks ? "yes" : "no");
   body.set("o:tracking-opens", "yes");
 
   try {

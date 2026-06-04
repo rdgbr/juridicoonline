@@ -36,6 +36,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           html: tpl.html,
           text: tpl.text,
           tags: ["magic-link"],
+          // Magic links são tokens de uso único — click tracking não agrega valor
+          // e o tracking domain (email.mg.*) não tem SSL, causando erro no browser.
+          // Open tracking (pixel) continua funcionando normalmente.
+          trackClicks: false,
         });
         if (!r.ok) {
           console.error("[auth] failed to send magic link", r.error);
