@@ -194,96 +194,77 @@ export async function sendWelcomeEmail(email: string, name?: string | null): Pro
   });
 }
 
-// ─── Email de ativação inteligente (D+2 após cadastro) ────────────
-// Baseado no purpose e nas empresas consultadas, oferece serviço relevante.
-// Só envia para usuários com partnerConsent=true.
+// ─── Email de feedback D+3 ─────────────────────────────────────────
+// Pergunta honesta: encontrou o que procurava?
+// Não tenta adivinhar — deixa o usuário falar.
+// Respostas vão para o admin via reply-to e ajudam a entender o produto.
 
-type FollowUpContext = {
-  email: string;
-  name?: string | null;
-  purpose?: string | null;
-  recentCnpjs?: string[]; // últimos CNPJs consultados
-  hasInapta?: boolean;    // consultou empresa inapta
-  hasMei?: boolean;       // consultou empresa MEI
-};
+export function feedbackEmail(email: string, name?: string | null): { html: string; text: string; subject: string } {
+  const greet = name ? `Olá, ${name.split(" ")[0]}` : "Olá";
+  const subject = "Encontrou o que procurava? (1 pergunta rápida)";
+  const replyTo = ADMIN_EMAIL;
 
-export function partnerFollowUpEmail(ctx: FollowUpContext): { html: string; text: string; subject: string } | null {
-  const greet = ctx.name ? `Olá, ${ctx.name.split(" ")[0]}` : "Olá";
-
-  // Escolhe o bloco mais relevante baseado no contexto
-  let assunto = "";
-  let servico = "";
-  let servicoUrl = "";
-  let mensagem = "";
-  let ctaLabel = "";
-
-  if (ctx.hasInapta) {
-    assunto = "Empresa inapta no CNPJ? Podemos ajudar";
-    servico = "Regularização de CNPJ";
-    servicoUrl = `${SITE}/servicos/regularizacao-cnpj`;
-    mensagem = `Notamos que você consultou empresas com situação <strong>inapta ou suspensa</strong> no Jurídico Online. Sabe o que isso significa? Empresa inapta não pode emitir nota fiscal, fica bloqueada para crédito e pode ter problemas em contratos. Nossa rede de contadores parceiros regulariza em 1 a 5 dias úteis.`;
-    ctaLabel = "Ver como regularizar";
-  } else if (ctx.purpose === "contabil" || ctx.purpose === "vendas") {
-    assunto = "Sua prospecção ficou mais fácil — veja como";
-    servico = "Prospecção com CNPJ";
-    servicoUrl = `${SITE}/servicos/contabilidade-para-empresa`;
-    mensagem = `Como você usa o Jurídico Online para ${ctx.purpose === "contabil" ? "contabilidade" : "prospecção de vendas"}, queria apresentar algo: nossa rede de contadores parceiros usa exatamente isso para encontrar novos clientes MEI e ME. Se quiser trocar experiências ou conhecer ferramentas complementares, temos especialistas disponíveis.`;
-    ctaLabel = "Conhecer a rede";
-  } else if (ctx.purpose === "juridico") {
-    assunto = "Due diligence mais completo — conheça nossos parceiros";
-    servico = "Due Diligence Societário";
-    servicoUrl = `${SITE}/servicos/advocacia-empresarial`;
-    mensagem = `Para quem faz due diligence jurídico, o Jurídico Online dá a base pública — CNPJ, sócios, situação. Mas nossos parceiros advogados complementam com busca em Junta Comercial, certidões negativas e relatório societário completo. Primeira consulta gratuita.`;
-    ctaLabel = "Falar com advogado parceiro";
-  } else if (ctx.hasMei) {
-    assunto = "Você pesquisou MEIs — precisa de contador para o seu?";
-    servico = "Contabilidade para MEI";
-    servicoUrl = `${SITE}/servicos/contabilidade-para-mei`;
-    mensagem = `Vimos que você consultou empresas MEI pelo Jurídico Online. Se você mesmo é MEI ou está abrindo um, nossa rede tem contadores especializados que cuidam do DAS, da DASN e do desenquadramento por R$60-150/mês.`;
-    ctaLabel = "Ver contadores para MEI";
-  } else {
-    // Genérico — só manda se tiver partnerConsent
-    assunto = "Uma pergunta rápida sobre o que você pesquisa";
-    servico = "Serviços especializados";
-    servicoUrl = `${SITE}/servicos`;
-    mensagem = `Você já consultou várias empresas no Jurídico Online — o que está buscando? Nossa rede tem contadores, advogados e parceiros financeiros que podem ajudar dependendo do objetivo. Clique abaixo para ver os serviços disponíveis ou responda este email diretamente.`;
-    ctaLabel = "Ver serviços disponíveis";
-  }
-
-  const subject = assunto;
   const body = `
     <h1 style="margin:0 0 12px;font-size:20px;font-weight:600;color:#0f172a;">${greet} 👋</h1>
-    <p style="margin:0 0 16px;color:#475569;">${mensagem}</p>
-    <div style="background:#f0f7ff;border-left:3px solid #0F4C81;border-radius:0 8px 8px 0;padding:14px 16px;margin:0 0 20px;">
-      <p style="margin:0;font-size:13px;font-weight:600;color:#0F4C81;">${servico}</p>
-      <p style="margin:4px 0 0;font-size:12px;color:#64748b;">Parceiros verificados · Atendimento em todo o Brasil</p>
+    <p style="margin:0 0 16px;color:#475569;">
+      Você se cadastrou no <strong>Jurídico Online</strong> há alguns dias. Uma pergunta rápida:
+    </p>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:18px 20px;margin:0 0 20px;">
+      <p style="margin:0 0 10px;font-size:16px;font-weight:600;color:#0f172a;">
+        Encontrou o que estava procurando?
+      </p>
+      <p style="margin:0;font-size:14px;color:#475569;">
+        Pode responder este email com qualquer coisa — o que buscou, o que faltou, o que funcionou bem ou não.
+        Lemos todas as respostas e usamos para melhorar o serviço.
+      </p>
     </div>
-    <p style="margin:0 0 16px;font-size:13px;color:#64748b;">
-      Você recebe este email porque marcou a opção de receber indicações de parceiros no cadastro.
-      Pode <a href="${SITE}/unsubscribe?email=${encodeURIComponent(ctx.email)}&type=partner" style="color:#64748b;">cancelar a qualquer momento</a>.
+    <p style="margin:0 0 8px;color:#475569;font-size:14px;">
+      Se quiser, clique em um dos botões abaixo:
+    </p>
+    <table cellpadding="0" cellspacing="0" border="0" style="margin:0 0 20px;">
+      <tr>
+        <td style="padding-right:8px;">
+          <a href="mailto:${replyTo}?subject=Feedback JOL: Encontrei&body=Oi, encontrei o que procurava. [conte mais se quiser]"
+             style="display:inline-block;background:#10B981;color:#ffffff;text-decoration:none;padding:10px 18px;border-radius:7px;font-size:13px;font-weight:500;">
+            ✅ Sim, encontrei
+          </a>
+        </td>
+        <td style="padding-right:8px;">
+          <a href="mailto:${replyTo}?subject=Feedback JOL: Não encontrei&body=Oi, não encontrei o que procurava. Estava buscando: [descreva aqui]"
+             style="display:inline-block;background:#f1f5f9;color:#334155;text-decoration:none;padding:10px 18px;border-radius:7px;font-size:13px;font-weight:500;border:1px solid #e2e8f0;">
+            ❌ Não encontrei
+          </a>
+        </td>
+        <td>
+          <a href="mailto:${replyTo}?subject=Feedback JOL: Sugestão&body=Oi, tenho uma sugestão: [escreva aqui]"
+             style="display:inline-block;background:#f1f5f9;color:#334155;text-decoration:none;padding:10px 18px;border-radius:7px;font-size:13px;font-weight:500;border:1px solid #e2e8f0;">
+            💡 Tenho sugestão
+          </a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0;font-size:12px;color:#94a3b8;">
+      Ou simplesmente responda este email — vai chegar direto para a gente.
     </p>`;
 
   const html = layout({
     title: subject,
-    preheader: mensagem.replace(/<[^>]+>/g, "").slice(0, 100),
+    preheader: "Encontrou o que procurava? Responda com uma linha — lemos tudo.",
     body,
-    ctaUrl: servicoUrl,
-    ctaLabel,
-    recipientEmail: ctx.email,
+    recipientEmail: email,
   });
-  const text = `${greet}\n\n${mensagem.replace(/<[^>]+>/g, "")}\n\nVer: ${servicoUrl}\n\nPara cancelar: ${SITE}/unsubscribe?email=${encodeURIComponent(ctx.email)}&type=partner`;
+  const text = `${greet}\n\nVocê se cadastrou no Jurídico Online há alguns dias.\n\nEncontrou o que estava procurando?\n\nResponda este email com qualquer coisa — o que buscou, o que faltou, o que funcionou bem. Lemos tudo e usamos para melhorar.\n\n— Equipe Jurídico Online`;
   return { html, text, subject };
 }
 
-// Envia o follow-up para um usuário específico com contexto calculado
-export async function sendPartnerFollowUp(ctx: FollowUpContext): Promise<void> {
-  const tpl = partnerFollowUpEmail(ctx);
-  if (!tpl) return;
+export async function sendFeedbackEmail(email: string, name?: string | null): Promise<void> {
+  const tpl = feedbackEmail(email, name);
   await sendEmail({
-    to: ctx.email,
+    to: email,
     subject: tpl.subject,
     html: tpl.html,
     text: tpl.text,
-    tags: ["partner-followup"],
+    replyTo: ADMIN_EMAIL,
+    tags: ["feedback-d3"],
   });
 }
