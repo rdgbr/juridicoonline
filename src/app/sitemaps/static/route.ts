@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { SITE_URL } from "@/lib/seo";
 import { UFS } from "@/lib/meili";
 import { getAllPosts } from "@/lib/blog";
+import { SERVICOS } from "@/lib/servicos";
 
 export const revalidate = 86400;
 export const dynamic = "force-static";
@@ -24,6 +25,13 @@ export async function GET() {
     { url: `${SITE_URL}/termos`, priority: 0.3, freq: "yearly" },
     { url: `${SITE_URL}/lgpd`, priority: 0.3, freq: "yearly" },
   ];
+
+  // Serviços e parceiros
+  urls.push({ url: `${SITE_URL}/servicos`, priority: 0.8, freq: "weekly" });
+  urls.push({ url: `${SITE_URL}/parceiros`, priority: 0.7, freq: "monthly" });
+  for (const s of SERVICOS) {
+    urls.push({ url: `${SITE_URL}/servicos/${s.slug}`, priority: 0.7, freq: "monthly" });
+  }
 
   // Blog posts
   for (const post of getAllPosts()) {
