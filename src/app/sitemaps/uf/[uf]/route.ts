@@ -24,6 +24,14 @@ export async function GET(_req: Request, { params }: { params: Promise<{ uf: str
     return new NextResponse("Not found", { status: 404 });
   }
 
+  // /sitemaps/uf/[uf] (sem número de página) redireciona pra /1.
+  // Googlebot tentava essa URL e ficava pendurado para sempre — queimava crawl budget.
+  // O conteúdo real está em /sitemaps/uf/[uf]/[page].
+  return NextResponse.redirect(
+    `https://juridicoonline.com.br/sitemaps/uf/${uf.toLowerCase()}/1`,
+    { status: 301, headers: { "Cache-Control": "public, max-age=86400" } }
+  );
+
   let urls: string[] = [];
   try {
     const res = await empresasIndex.search<EmpresaLite>("", {

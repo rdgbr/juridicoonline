@@ -15,8 +15,10 @@ export async function GET() {
   sitemaps.push(`${SITE_URL}/sitemaps/static`);
   sitemaps.push(`${SITE_URL}/sitemaps/cnae`);
 
-  // Socios sitemaps — 200 pages × 5k = 1M top socios
-  for (let p = 1; p <= 200; p++) {
+  // Socios sitemaps — 50 pages × 5k = 250k sócios únicos.
+  // Cap em 50: páginas 51-200 causavam 504 (OFFSET alto = 25s de query no Postgres).
+  // 250k sócios indexáveis é mais que suficiente pra capturar long-tail de nomes.
+  for (let p = 1; p <= 50; p++) {
     sitemaps.push(`${SITE_URL}/sitemaps/socios/${p}`);
   }
 
