@@ -81,17 +81,33 @@ export function CadastroForm({ nextPath }: { nextPath?: string }) {
         </select>
       </div>
 
-      <label className="flex items-start gap-2.5 cursor-pointer">
-        <input
-          type="checkbox"
-          name="newsletter"
-          defaultChecked
-          className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#0F4C81] focus:ring-[#0F4C81]/30"
-        />
-        <span className="text-xs text-slate-600 leading-relaxed">
-          Quero receber a newsletter <strong>Radar Empresarial</strong> (semanal, sem spam).
-        </span>
-      </label>
+      <div className="space-y-2.5 pt-1">
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            name="newsletter"
+            defaultChecked
+            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#0F4C81] focus:ring-[#0F4C81]/30"
+          />
+          <span className="text-xs text-slate-600 leading-relaxed">
+            Quero receber a newsletter <strong>Radar Empresarial</strong> — dicas semanais sobre CNPJ e empresas.
+          </span>
+        </label>
+
+        {/* LGPD Art.7 — consentimento explícito e granular para parceiros */}
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            name="partnerConsent"
+            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#0F4C81] focus:ring-[#0F4C81]/30"
+          />
+          <span className="text-xs text-slate-600 leading-relaxed">
+            Aceito receber indicações de <strong>contadores, advogados e bancos parceiros</strong> quando
+            relevantes ao que pesquisei. Posso cancelar a qualquer momento.
+            <a href="/privacidade#parceiros" className="ml-1 text-[#0F4C81] hover:underline">Saiba mais</a>
+          </span>
+        </label>
+      </div>
 
       <SubmitButton />
 

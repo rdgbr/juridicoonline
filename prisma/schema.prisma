@@ -17,9 +17,11 @@ model User {
   image         String?
 
   // JOL-specific
-  purpose       String?   // vendas, contabil, rh, cobranca, etc
-  newsletterOptIn Boolean @default(true)
-  plan          String    @default("free") // free, pro, business, api
+  purpose          String?   // vendas, contabil, rh, cobranca, etc
+  newsletterOptIn  Boolean   @default(true)
+  partnerConsent   Boolean   @default(false) // LGPD Art.7: aceita indicações de parceiros
+  partnerConsentAt DateTime?                 // timestamp do aceite (auditoria LGPD)
+  plan             String    @default("free") // free, pro, business, api
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -90,20 +92,21 @@ model Consultation {
 
 // Lead capture (when user signs up — denormalized so we never lose this even if user is deleted)
 model Lead {
-  id           String   @id @default(cuid())
-  email        String
-  name         String?
-  purpose      String?
-  newsletter   Boolean  @default(true)
-  source       String?  // organic, ads, referral
-  utmSource    String?
-  utmMedium    String?
-  utmCampaign  String?
-  ip           String?
-  ua           String?  @db.Text
-  createdAt    DateTime @default(now())
-  syncedToCrm  Boolean  @default(false)
-  syncedAt     DateTime?
+  id              String   @id @default(cuid())
+  email           String
+  name            String?
+  purpose         String?
+  newsletter      Boolean  @default(true)
+  partnerConsent  Boolean  @default(false) // espelho do User.partnerConsent
+  source          String?  // organic, ads, referral
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  ip              String?
+  ua              String?  @db.Text
+  createdAt       DateTime @default(now())
+  syncedToCrm     Boolean  @default(false)
+  syncedAt        DateTime?
 
   @@index([email])
   @@index([createdAt])

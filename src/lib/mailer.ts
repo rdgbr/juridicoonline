@@ -193,3 +193,97 @@ export async function sendWelcomeEmail(email: string, name?: string | null): Pro
     tags: ["welcome"],
   });
 }
+
+// ─── Email de ativação inteligente (D+2 após cadastro) ────────────
+// Baseado no purpose e nas empresas consultadas, oferece serviço relevante.
+// Só envia para usuários com partnerConsent=true.
+
+type FollowUpContext = {
+  email: string;
+  name?: string | null;
+  purpose?: string | null;
+  recentCnpjs?: string[]; // últimos CNPJs consultados
+  hasInapta?: boolean;    // consultou empresa inapta
+  hasMei?: boolean;       // consultou empresa MEI
+};
+
+export function partnerFollowUpEmail(ctx: FollowUpContext): { html: string; text: string; subject: string } | null {
+  const greet = ctx.name ? `Olá, ${ctx.name.split(" ")[0]}` : "Olá";
+
+  // Escolhe o bloco mais relevante baseado no contexto
+  let assunto = "";
+  let servico = "";
+  let servicoUrl = "";
+  let mensagem = "";
+  let ctaLabel = "";
+
+  if (ctx.hasInapta) {
+    assunto = "Empresa inapta no CNPJ? Podemos ajudar";
+    servico = "Regularização de CNPJ";
+    servicoUrl = `${SITE}/servicos/regularizacao-cnpj`;
+    mensagem = `Notamos que você consultou empresas com situação <strong>inapta ou suspensa</strong> no Jurídico Online. Sabe o que isso significa? Empresa inapta não pode emitir nota fiscal, fica bloqueada para crédito e pode ter problemas em contratos. Nossa rede de contadores parceiros regulariza em 1 a 5 dias úteis.`;
+    ctaLabel = "Ver como regularizar";
+  } else if (ctx.purpose === "contabil" || ctx.purpose === "vendas") {
+    assunto = "Sua prospecção ficou mais fácil — veja como";
+    servico = "Prospecção com CNPJ";
+    servicoUrl = `${SITE}/servicos/contabilidade-para-empresa`;
+    mensagem = `Como você usa o Jurídico Online para ${ctx.purpose === "contabil" ? "contabilidade" : "prospecção de vendas"}, queria apresentar algo: nossa rede de contadores parceiros usa exatamente isso para encontrar novos clientes MEI e ME. Se quiser trocar experiências ou conhecer ferramentas complementares, temos especialistas disponíveis.`;
+    ctaLabel = "Conhecer a rede";
+  } else if (ctx.purpose === "juridico") {
+    assunto = "Due diligence mais completo — conheça nossos parceiros";
+    servico = "Due Diligence Societário";
+    servicoUrl = `${SITE}/servicos/advocacia-empresarial`;
+    mensagem = `Para quem faz due diligence jurídico, o Jurídico Online dá a base pública — CNPJ, sócios, situação. Mas nossos parceiros advogados complementam com busca em Junta Comercial, certidões negativas e relatório societário completo. Primeira consulta gratuita.`;
+    ctaLabel = "Falar com advogado parceiro";
+  } else if (ctx.hasMei) {
+    assunto = "Você pesquisou MEIs — precisa de contador para o seu?";
+    servico = "Contabilidade para MEI";
+    servicoUrl = `${SITE}/servicos/contabilidade-para-mei`;
+    mensagem = `Vimos que você consultou empresas MEI pelo Jurídico Online. Se você mesmo é MEI ou está abrindo um, nossa rede tem contadores especializados que cuidam do DAS, da DASN e do desenquadramento por R$60-150/mês.`;
+    ctaLabel = "Ver contadores para MEI";
+  } else {
+    // Genérico — só manda se tiver partnerConsent
+    assunto = "Uma pergunta rápida sobre o que você pesquisa";
+    servico = "Serviços especializados";
+    servicoUrl = `${SITE}/servicos`;
+    mensagem = `Você já consultou várias empresas no Jurídico Online — o que está buscando? Nossa rede tem contadores, advogados e parceiros financeiros que podem ajudar dependendo do objetivo. Clique abaixo para ver os serviços disponíveis ou responda este email diretamente.`;
+    ctaLabel = "Ver serviços disponíveis";
+  }
+
+  const subject = assunto;
+  const body = `
+    <h1 style="margin:0 0 12px;font-size:20px;font-weight:600;color:#0f172a;">${greet} 👋</h1>
+    <p style="margin:0 0 16px;color:#475569;">${mensagem}</p>
+    <div style="background:#f0f7ff;border-left:3px solid #0F4C81;border-radius:0 8px 8px 0;padding:14px 16px;margin:0 0 20px;">
+      <p style="margin:0;font-size:13px;font-weight:600;color:#0F4C81;">${servico}</p>
+      <p style="margin:4px 0 0;font-size:12px;color:#64748b;">Parceiros verificados · Atendimento em todo o Brasil</p>
+    </div>
+    <p style="margin:0 0 16px;font-size:13px;color:#64748b;">
+      Você recebe este email porque marcou a opção de receber indicações de parceiros no cadastro.
+      Pode <a href="${SITE}/unsubscribe?email=${encodeURIComponent(ctx.email)}&type=partner" style="color:#64748b;">cancelar a qualquer momento</a>.
+    </p>`;
+
+  const html = layout({
+    title: subject,
+    preheader: mensagem.replace(/<[^>]+>/g, "").slice(0, 100),
+    body,
+    ctaUrl: servicoUrl,
+    ctaLabel,
+    recipientEmail: ctx.email,
+  });
+  const text = `${greet}\n\n${mensagem.replace(/<[^>]+>/g, "")}\n\nVer: ${servicoUrl}\n\nPara cancelar: ${SITE}/unsubscribe?email=${encodeURIComponent(ctx.email)}&type=partner`;
+  return { html, text, subject };
+}
+
+// Envia o follow-up para um usuário específico com contexto calculado
+export async function sendPartnerFollowUp(ctx: FollowUpContext): Promise<void> {
+  const tpl = partnerFollowUpEmail(ctx);
+  if (!tpl) return;
+  await sendEmail({
+    to: ctx.email,
+    subject: tpl.subject,
+    html: tpl.html,
+    text: tpl.text,
+    tags: ["partner-followup"],
+  });
+}

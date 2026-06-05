@@ -11,6 +11,7 @@ const schema = z.object({
   name: z.string().trim().min(2).max(80).optional().nullable(),
   purpose: z.string().max(40).optional().nullable(),
   newsletter: z.boolean().default(true),
+  partnerConsent: z.boolean().default(false),
   next: z.string().optional().nullable(),
 });
 
@@ -26,6 +27,7 @@ export async function cadastroAction(_prev: CadastroState, formData: FormData): 
     name: String(formData.get("name") || "").trim() || null,
     purpose: String(formData.get("purpose") || "") || null,
     newsletter: formData.get("newsletter") === "on",
+    partnerConsent: formData.get("partnerConsent") === "on",
     next: String(formData.get("next") || "") || null,
   };
 
@@ -55,6 +57,7 @@ export async function cadastroAction(_prev: CadastroState, formData: FormData): 
         name: data.name,
         purpose: data.purpose,
         newsletter: data.newsletter,
+        partnerConsent: data.partnerConsent,
         ip,
         ua,
         source: "cadastro",
@@ -72,12 +75,16 @@ export async function cadastroAction(_prev: CadastroState, formData: FormData): 
         name: data.name ?? undefined,
         purpose: data.purpose ?? undefined,
         newsletterOptIn: data.newsletter,
+        partnerConsent: data.partnerConsent,
+        ...(data.partnerConsent ? { partnerConsentAt: new Date() } : {}),
       },
       create: {
         email: data.email,
         name: data.name,
         purpose: data.purpose,
         newsletterOptIn: data.newsletter,
+        partnerConsent: data.partnerConsent,
+        ...(data.partnerConsent ? { partnerConsentAt: new Date() } : {}),
       },
     });
   } catch (e) {
