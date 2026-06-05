@@ -293,6 +293,127 @@ export async function listFilteredByUF(
  * List empresas opened in a given period (YYYY-MM format).
  * Used by /empresas-abertas/[uf]/[periodo] landings.
  */
+/**
+ * Stats agregados para a hub page de UF — tudo em paralelo numa chamada só.
+ * Retorna: total, MEI, Simples, abertas nos últimos 30 dias, top CNAEs, municípios.
+ */
+export type UFStats = {
+  totalAtivas: number;
+  totalMei: number;
+  totalSimples: number;
+  abertas30d: number;
+  topCnaes: { codigo: string; descricao: string; count: number }[];
+  topMunicipios: { name: string; count: number }[];
+};
+
+export async function getUFStats(uf: string): Promise<UFStats> {
+  const sigla = uf.toUpperCase();
+  const baseFilter = [`uf = "${sigla}"`, 'situacao = "ATIVA"'];
+
+  // Calcula cutoff dos últimos 30 dias
+  const cutoff30 = new Date();
+  cutoff30.setDate(cutoff30.getDate() - 30);
+  const cutoffStr =
+    cutoff30.getFullYear().toString() +
+    String(cutoff30.getMonth() + 1).padStart(2, "0") +
+    String(cutoff30.getDate()).padStart(2, "0");
+
+  const [statsRes, meiRes, simplesRes, abertas30Res, topCnaeRes] = await Promise.all([
+    // facets de município — 1 query que retorna contagem total + top municípios + CNAEs
+    empresasIndex.search<Empresa>("", {
+      limit: 0,
+      filter: baseFilter,
+      facets: ["municipio_nome", "cnae_principal"],
+    }).catch(() => null),
+    // MEI count
+    empresasIndex.search("", { limit: 0, filter: [...baseFilter, 'opcao_mei = "S"'] })
+      .catch(() => ({ estimatedTotalHits: 0 })),
+    // Simples count
+    empresasIndex.search("", { limit: 0, filter: [...baseFilter, 'opcao_simples = "S"'] })
+      .catch(() => ({ estimatedTotalHits: 0 })),
+    // Abertas últimos 30 dias
+    empresasIndex.search("", {
+      limit: 0,
+      filter: [`uf = "${sigla}"`, `data_inicio_atividade >= "${cutoffStr}"`],
+    }).catch(() => ({ estimatedTotalHits: 0 })),
+    // Top CNAEs com descrição (pega 1 empresa de cada CNAE)
+    empresasIndex.search<Empresa>("", {
+      limit: 0, filter: baseFilter, facets: ["cnae_principal"],
+    }).catch(() => null),
+  ]);
+
+  // Processa municípios
+  const munFacets = (statsRes?.facetDistribution?.municipio_nome ?? {}) as Record<string, number>;
+  const topMunicipios = Object.entries(munFacets)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 50);
+
+  // Total real: soma dos municípios (mais preciso que estimatedTotalHits)
+  const totalAtivas = statsRes?.estimatedTotalHits ?? 0;
+
+  // Top CNAEs — busca descrição de cada top CNAE em paralelo (limitado a 10)
+  const cnaeRaw = (topCnaeRes?.facetDistribution?.cnae_principal ?? {}) as Record<string, number>;
+  const topCnaeList = Object.entries(cnaeRaw)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+
+  // Pega descrição do primeiro CNAE batendo na empresa — em paralelo
+  const topCnaes = await Promise.all(
+    topCnaeList.map(async ([codigo, count]) => {
+      try {
+        const res = await empresasIndex.search<Empresa>("", {
+          limit: 1,
+          filter: [...baseFilter, `cnae_principal = "${codigo}"`],
+          attributesToRetrieve: ["cnae_descricao"],
+        });
+        return { codigo, descricao: res.hits[0]?.cnae_descricao || codigo, count };
+      } catch {
+        return { codigo, descricao: codigo, count };
+      }
+    })
+  );
+
+  return {
+    totalAtivas,
+    totalMei: meiRes.estimatedTotalHits ?? 0,
+    totalSimples: simplesRes.estimatedTotalHits ?? 0,
+    abertas30d: abertas30Res.estimatedTotalHits ?? 0,
+    topCnaes,
+    topMunicipios,
+  };
+}
+
+/**
+ * Stats para página de CNAE — total nacional, top UFs, contagem total.
+ */
+export type CNAEStats = {
+  totalNacional: number;
+  topUFs: { uf: string; nome: string; count: number }[];
+};
+
+export async function getCNAEStats(cnae: string): Promise<CNAEStats> {
+  const filter = [`cnae_principal = "${cnae}"`, 'situacao = "ATIVA"'];
+  const res = await empresasIndex.search("", {
+    limit: 0, filter, facets: ["uf"],
+  }).catch(() => null);
+
+  const ufFacets = (res?.facetDistribution?.uf ?? {}) as Record<string, number>;
+  const topUFs = Object.entries(ufFacets)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([uf, count]) => ({
+      uf,
+      nome: UFS.find(u => u.sigla === uf)?.nome || uf,
+      count,
+    }));
+
+  return {
+    totalNacional: res?.estimatedTotalHits ?? 0,
+    topUFs,
+  };
+}
+
 export async function listEmpresasAbertasNoPeriodo(
   uf: string,
   ano: number,
