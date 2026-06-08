@@ -30,10 +30,10 @@
 | 2026-06-04 | 38      | 1.351      | 8.3        | |
 | 2026-06-05 | 72      | 3.072      | 8.0        | **Recorde** · gate removido, dados abertos |
 | 2026-06-06 | 55      | 2.934      | 8.3        | ← novo |
-| 2026-06-07 | —       | —          | —          | (lag GSC) |
+| 2026-06-07 | **108** | **5.580**  | **7.9**    | 🏅 **NOVO RECORDE** (screenshot 24h GSC) |
 | 2026-06-08 | —       | —          | —          | hoje |
 
-**Total acumulado (até Jun 6):** 375 cliques · 17.592 impressões
+**Total acumulado (até Jun 7):** 483 cliques · 23.172 impressões
 
 ---
 
@@ -142,6 +142,7 @@ Com 25 milhões de sócios indexáveis, esse é o maior motor de crescimento do 
 | 2026-06-01 | 📈 Salto 4× num dia (14→59) |
 | 2026-06-05 | 🏅 Recorde diário: 72 cliques |
 | 2026-06-06 | 🔓 Gate removido — dados abertos |
+| 2026-06-07 | 🏅 Novo recorde: **108 cliques** · 5.58K impressões · pos 7.9 |
 | 2026-06-06 | 🥇 Primeira página em **posição 1** (/socio/ana-maria-soares-petracconi) |
 
 ---
@@ -150,7 +151,7 @@ Com 25 milhões de sócios indexáveis, esse é o maior motor de crescimento do 
 
 | Métrica | Jun 6 (atual) | Target 30d | Target 90d |
 |---------|:-------------:|:----------:|:----------:|
-| Cliques/dia | ~55–72 | 300 | 2.000 |
-| Impressões/dia | ~2.900 | 15.000 | 100.000 |
-| Posição média | 8.0 | 6.0 | 4.0 |
-| Cliques/mês | ~375 (parcial) | 6.000 | 50.000 |
+| Cliques/dia | **108** | 400 | 3.000 |
+| Impressões/dia | **5.580** | 20.000 | 150.000 |
+| Posição média | 7.9 | 5.5 | 3.5 |
+| Cliques/mês | ~483 (parcial) | 8.000 | 60.000 |
