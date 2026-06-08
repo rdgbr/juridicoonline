@@ -15,7 +15,15 @@ RUN npm ci --no-audit --no-fund
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Build args — NEXT_PUBLIC_* precisam existir em tempo de build pra serem baked no bundle.
+# .env está no .dockerignore então passamos via docker-compose buildargs.
+ARG NEXT_PUBLIC_GA4_ID=""
+ARG NEXT_PUBLIC_HOTJAR_ID=""
+ENV NEXT_PUBLIC_GA4_ID=$NEXT_PUBLIC_GA4_ID
+ENV NEXT_PUBLIC_HOTJAR_ID=$NEXT_PUBLIC_HOTJAR_ID
 ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN npx prisma generate
 RUN npm run build
 

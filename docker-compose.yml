@@ -37,6 +37,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_GA4_ID: ${NEXT_PUBLIC_GA4_ID:-}
+        NEXT_PUBLIC_HOTJAR_ID: ${NEXT_PUBLIC_HOTJAR_ID:-}
     container_name: jol-app
     restart: unless-stopped
     depends_on:
@@ -68,6 +71,10 @@ services:
       # Google OAuth (optional)
       AUTH_GOOGLE_ID: ${AUTH_GOOGLE_ID:-}
       AUTH_GOOGLE_SECRET: ${AUTH_GOOGLE_SECRET:-}
+      # Analytics (server-side runtime — não precisa de build arg)
+      GA4_ID: ${GA4_ID:-${NEXT_PUBLIC_GA4_ID:-}}
+      HOTJAR_ID: ${HOTJAR_ID:-${NEXT_PUBLIC_HOTJAR_ID:-}}
+      NEXT_PUBLIC_CF_ANALYTICS_TOKEN: ${NEXT_PUBLIC_CF_ANALYTICS_TOKEN:-}
     ports:
       - "127.0.0.1:3470:3000"
     networks:

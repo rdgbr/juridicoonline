@@ -32,6 +32,7 @@ model User {
   consultations Consultation[]
   apiKeys       ApiKey[]
   subscription  Subscription?
+  companyWatches CompanyWatch[]
 
   @@index([email])
 }
@@ -207,6 +208,22 @@ model Invoice {
 
   @@index([subscriptionId])
   @@index([status])
+}
+
+model CompanyWatch {
+  id          String    @id @default(cuid())
+  userId      String
+  cnpj        String
+  razaoSocial String?
+  situacao    String?   // snapshot da situação no momento do watch
+  alertedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, cnpj])
+  @@index([userId])
+  @@index([cnpj])
 }
 
 model WebhookEvent {

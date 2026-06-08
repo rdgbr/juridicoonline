@@ -1507,6 +1507,373 @@ export const POSTS: BlogPost[] = [
 
 <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mt-6"><h3 class="font-semibold text-slate-900 mb-2">Precisa de ajuda com isso?</h3><p class="text-sm text-slate-700">Nossa rede de parceiros conta com contadores e advogados verificados em todo o Brasil. <a href="/parceiros" class="text-[#0F4C81] font-medium hover:underline">Fale com um especialista →</a></p></div>`,
   },
+  // ─── Posts de jornalismo de dados — gerados da base de 65M empresas ───────
+
+  {
+    slug: "quantas-empresas-existem-no-brasil-2026",
+    title: "Quantas empresas existem no Brasil em 2026? Os números reais",
+    excerpt: "65,7 milhões de CNPJs registrados, mas só 40% estão ativos. Veja o raio-x completo das empresas brasileiras por estado, porte e regime tributário — dados diretos da Receita Federal.",
+    category: "Dados e Estatísticas",
+    publishedAt: "2026-06-06",
+    updatedAt: "2026-06-06",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 7,
+    keywords: ["quantas empresas existem no brasil", "número de empresas brasil 2026", "empresas ativas brasil", "cnpj brasil estatísticas"],
+    body: `<p>O Brasil tem <strong>65,7 milhões de CNPJs registrados</strong> na Receita Federal. Mas esse número esconde uma realidade surpreendente: menos da metade das empresas que já existiram no país ainda estão funcionando. Este é o raio-x completo, com dados extraídos diretamente da base oficial em junho de 2026.</p>
+
+<h2>Situação cadastral: só 40% estão ativas</h2>
+<p>Do total de CNPJs registrados na Receita Federal:</p>
+<ul>
+<li><strong>26,6 milhões (40,5%) estão ATIVAS</strong> — operando regularmente</li>
+<li><strong>30,3 milhões (46,1%) estão BAIXADAS</strong> — encerradas formal ou informalmente</li>
+<li><strong>8,5 milhões (12,9%) estão INAPTAS</strong> — abandonadas sem baixa formal, sem declarar impostos há mais de 2 anos</li>
+<li><strong>270 mil (0,4%) estão SUSPENSAS</strong> — com irregularidade cadastral em apuração</li>
+</ul>
+
+<p>Em outras palavras: <strong>para cada empresa ativa no Brasil, há 1,5 empresa que já fechou ou foi abandonada.</strong></p>
+
+<h2>Regimes tributários das empresas ativas</h2>
+<p>Das 26,6 milhões de empresas ativas:</p>
+<ul>
+<li><strong>20 milhões (75%) optam pelo Simples Nacional</strong> — o regime unificado para pequenas empresas</li>
+<li><strong>13 milhões (49%) são MEI</strong> (Microempreendedor Individual) — incluídos no Simples</li>
+<li><strong>6,6 milhões (25%) estão no Lucro Presumido, Real ou outro regime</strong></li>
+</ul>
+<p>O Brasil é, na prática, um país de microempreendedores: metade de todas as empresas ativas são MEI — uma pessoa só, com faturamento até R$ 81.000 por ano.</p>
+
+<h2>Por porte das empresas ativas</h2>
+<ul>
+<li><strong>Microempresas (ME):</strong> 49 milhões de CNPJs registrados historicamente</li>
+<li><strong>Empresas de Pequeno Porte (EPP):</strong> 1,9 milhões</li>
+<li><strong>Demais (médio e grande porte):</strong> 14,7 milhões</li>
+</ul>
+
+<h2>Ranking por estado: onde há mais e menos empresas ativas</h2>
+<p>São Paulo concentra quase 8 milhões de empresas ativas — mais que os 26 estados restantes combinados em vários casos. Mas quando se olha para a <em>qualidade</em> do cadastro — ou seja, a taxa de empresas inaptas — o mapa muda:</p>
+
+<table style="width:100%;border-collapse:collapse;font-size:14px;margin:16px 0">
+<thead>
+<tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+<th style="text-align:left;padding:8px 12px">Estado</th>
+<th style="text-align:right;padding:8px 12px">Empresas ativas</th>
+<th style="text-align:right;padding:8px 12px">Inaptas</th>
+<th style="text-align:right;padding:8px 12px">% inapta</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">🔴 Pará</td><td style="text-align:right;padding:7px 12px">491.721</td><td style="text-align:right;padding:7px 12px">235.745</td><td style="text-align:right;padding:7px 12px;color:#dc2626;font-weight:600">17,8%</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">🔴 Rio de Janeiro</td><td style="text-align:right;padding:7px 12px">2.210.659</td><td style="text-align:right;padding:7px 12px">938.982</td><td style="text-align:right;padding:7px 12px;color:#dc2626;font-weight:600">16,7%</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">🔴 Maranhão</td><td style="text-align:right;padding:7px 12px">346.186</td><td style="text-align:right;padding:7px 12px">153.565</td><td style="text-align:right;padding:7px 12px;color:#dc2626;font-weight:600">15,8%</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">🟡 São Paulo</td><td style="text-align:right;padding:7px 12px">7.844.975</td><td style="text-align:right;padding:7px 12px">2.276.899</td><td style="text-align:right;padding:7px 12px;color:#d97706">12,2%</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">🟡 Rio Grande do Sul</td><td style="text-align:right;padding:7px 12px">1.652.558</td><td style="text-align:right;padding:7px 12px">544.694</td><td style="text-align:right;padding:7px 12px;color:#d97706">12,1%</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">🟡 Minas Gerais</td><td style="text-align:right;padding:7px 12px">2.757.164</td><td style="text-align:right;padding:7px 12px">750.110</td><td style="text-align:right;padding:7px 12px;color:#d97706">10,5%</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">🟢 Paraná</td><td style="text-align:right;padding:7px 12px">1.786.659</td><td style="text-align:right;padding:7px 12px">504.144</td><td style="text-align:right;padding:7px 12px;color:#059669">11,6%</td></tr>
+<tr><td style="padding:7px 12px">🟢 Santa Catarina</td><td style="text-align:right;padding:7px 12px">1.419.497</td><td style="text-align:right;padding:7px 12px">306.388</td><td style="text-align:right;padding:7px 12px;color:#059669;font-weight:600">9,8%</td></tr>
+</tbody>
+</table>
+
+<p><strong>Santa Catarina tem a menor taxa de inaptas do Brasil</strong> (9,8%) e a maior proporção de empresas ativas (45,2% do total cadastrado). O Pará lidera negativamente: quase 1 em cada 5 CNPJs está inapto.</p>
+
+<h2>O que é uma empresa INAPTA e por que importa</h2>
+<p>Uma empresa torna-se inapta quando não entrega declarações obrigatórias à Receita Federal por dois anos consecutivos. Isso significa que ela:</p>
+<ul>
+<li><strong>Não pode emitir nota fiscal válida</strong> — qualquer NF emitida por empresa inapta pode ser glosada</li>
+<li><strong>Não pode obter certidão negativa</strong></li>
+<li><strong>Não pode participar de licitações públicas</strong></li>
+<li>Os sócios ficam impedidos de abrir novas empresas em alguns casos</li>
+</ul>
+<p>Antes de fechar negócio com qualquer empresa, verifique a situação cadastral pelo CNPJ. <a href="/buscar">Consulte gratuitamente no Jurídico Online</a>.</p>
+
+<h2>Metodologia</h2>
+<p>Dados extraídos da base pública do CNPJ (Receita Federal), processada e atualizada diariamente pelo Jurídico Online. Total de 65.731.428 registros analisados em junho de 2026. Atualização: diária.</p>`,
+  },
+
+  {
+    slug: "empresas-mais-antigas-ativas-brasil",
+    title: "As empresas mais antigas ainda ativas no Brasil",
+    excerpt: "A empresa ativa mais antiga do Brasil abriu em 1891 — tem 135 anos e ainda opera. Conheça as empresas brasileiras com mais de um século de história, verificadas pela Receita Federal.",
+    category: "Dados e Estatísticas",
+    publishedAt: "2026-06-06",
+    updatedAt: "2026-06-06",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 5,
+    keywords: ["empresa mais antiga do brasil", "empresas centenárias brasil", "cnpj mais antigo brasil", "empresa mais velha brasil ativa"],
+    body: `<p>Entre os 65 milhões de CNPJs registrados na Receita Federal, existem empresas abertas antes da República, antes da invenção do avião, antes do automóvel. Filtrando apenas as que estão com situação <strong>ATIVA</strong> hoje — em plena operação — encontramos histórias surpreendentes de longevidade empresarial brasileira.</p>
+
+<h2>A empresa ativa mais antiga do Brasil</h2>
+<p>Fundada em <strong>23 de outubro de 1891</strong>, a <strong>Companhia de Tecidos Santanense</strong>, de Minas Gerais, aparece na base da Receita Federal como a empresa com data de início de atividade mais antiga entre as que ainda têm CNPJ registrado. Com 135 anos de história, ela atravessou dois regimes políticos, duas guerras mundiais e diversas crises econômicas.</p>
+
+<p>Curiosamente, ela consta atualmente <em>em recuperação judicial</em> — o que explica por que o CNPJ ainda está ativo mesmo com a empresa em dificuldades financeiras. A recuperação judicial é exatamente o instrumento criado para tentar salvar empresas como essa.</p>
+
+<h2>As 5 empresas ativas com data de início mais antiga</h2>
+<table style="width:100%;border-collapse:collapse;font-size:14px;margin:16px 0">
+<thead>
+<tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+<th style="text-align:left;padding:8px 12px">Fundação</th>
+<th style="text-align:left;padding:8px 12px">Empresa</th>
+<th style="text-align:center;padding:8px 12px">UF</th>
+<th style="text-align:center;padding:8px 12px">Anos</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">23/10/1891</td><td style="padding:7px 12px"><a href="/empresa/17314033000167-companhia-de-tecidos-santanense" class="text-[#0F4C81] hover:underline">Companhia de Tecidos Santanense</a></td><td style="text-align:center;padding:7px 12px">MG</td><td style="text-align:center;padding:7px 12px;font-weight:600">135</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">05/07/1893</td><td style="padding:7px 12px">Junta Comercial do Estado de Minas Gerais</td><td style="text-align:center;padding:7px 12px">MG</td><td style="text-align:center;padding:7px 12px;font-weight:600">133</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">19/04/1899</td><td style="padding:7px 12px"><a href="/empresa/89355099000106-klabin-sa" class="text-[#0F4C81] hover:underline">Klabin S.A.</a></td><td style="text-align:center;padding:7px 12px">SP</td><td style="text-align:center;padding:7px 12px;font-weight:600">127</td></tr>
+<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:7px 12px">16/10/1899</td><td style="padding:7px 12px">Transportes e Carruagens Ltda.</td><td style="text-align:center;padding:7px 12px">RJ</td><td style="text-align:center;padding:7px 12px;font-weight:600">127</td></tr>
+<tr><td style="padding:7px 12px">01/01/1901</td><td style="padding:7px 12px">Registro de Imóveis, Títulos e Documentos</td><td style="text-align:center;padding:7px 12px">MG</td><td style="text-align:center;padding:7px 12px;font-weight:600">125</td></tr>
+</tbody>
+</table>
+
+<h2>Klabin: 127 anos e ainda na bolsa</h2>
+<p>Fundada em 19 de abril de 1899 pelos irmãos Klabin — imigrantes lituanos — a <strong>Klabin S.A.</strong> é hoje a maior produtora e exportadora de papéis, cartões e embalagens do Brasil. Com capital aberto na B3, ela é um dos casos mais extraordinários de longevidade empresarial no país.</p>
+<p>Em 1899, o Brasil tinha menos de 20 anos de República. O avião seria inventado apenas 4 anos depois. A Klabin estava lá antes de tudo isso — e segue ativa.</p>
+
+<h2>Por que Minas Gerais concentra as empresas mais antigas?</h2>
+<p>Três das cinco empresas mais antigas são mineiras. Isso reflete a história econômica do Brasil: Minas Gerais foi o epicentro da mineração colonial e, por isso, desenvolveu estruturas comerciais e institucionais antes de outros estados. O setor têxtil mineiro, como a Santanense, floresceu no final do século XIX quando o país tentava industrializar-se.</p>
+
+<h2>Empresas centenárias por setor</h2>
+<p>Entre as empresas com mais de 100 anos ainda ativas no Brasil, predominam:</p>
+<ul>
+<li><strong>Setor financeiro e bancário</strong> — bancos como Bradesco (1943) e Itaú (1924) são jovens comparados aos mais antigos, mas o setor tem forte longevidade</li>
+<li><strong>Indústria têxtil e de papel</strong> — Klabin, Santanense e similares</li>
+<li><strong>Registro e cartórios</strong> — entidades com natureza quase institucional</li>
+<li><strong>Cooperativas agrícolas</strong> — especialmente no Sul do país</li>
+</ul>
+
+<h2>Como verificar a data de fundação de qualquer empresa</h2>
+<p>A <strong>data de início de atividade</strong> declarada na Receita Federal aparece em qualquer consulta de CNPJ — é o dado mais próximo da data de fundação disponível publicamente. Vale notar que algumas empresas antigas migraram de tipo jurídico ao longo dos anos e podem ter datas mais recentes que sua fundação real.</p>
+
+<p>Para consultar: acesse <a href="/buscar">nossa busca</a>, informe o CNPJ ou razão social e veja a data de abertura na ficha da empresa.</p>
+
+<h2>Metodologia</h2>
+<p>Dados extraídos da base pública do CNPJ (Receita Federal), atualização junho de 2026. Filtro aplicado: situação = ATIVA, ordenação por data_inicio_atividade crescente. A data registrada é a declarada pela empresa à Receita Federal, que pode diferir da data de fundação histórica em casos de reestruturações societárias.</p>`,
+  },
+
+  // ─── Posts novos Jun/2026 — oportunidades identificadas via SERP Finder ───
+
+  {
+    slug: "como-pesquisar-empresa-por-telefone",
+    title: "Como pesquisar empresa pelo telefone e descobrir o CNPJ",
+    excerpt: "Tem um número de telefone e quer saber qual empresa está por trás? Veja como encontrar o CNPJ, razão social e situação cadastral pelo telefone em segundos.",
+    category: "Consulta CNPJ",
+    publishedAt: "2026-06-06",
+    updatedAt: "2026-06-06",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 5,
+    keywords: ["pesquisar empresa por telefone", "encontrar cnpj pelo telefone", "buscar empresa pelo número", "telefone cnpj receita federal"],
+    body: `<p>Você recebeu uma ligação de um número desconhecido ou tem o telefone de uma empresa mas não sabe o CNPJ? Dá pra descobrir — e é mais simples do que parece. Os dados de contato de empresas brasileiras ficam registrados na Receita Federal junto ao CNPJ, e dá pra fazer essa busca de forma reversa.</p>
+
+<h2>Como funciona a busca por telefone no Jurídico Online</h2>
+<p>O <a href="/buscar">buscador do Jurídico Online</a> permite pesquisar diretamente pelo número de telefone. Basta digitar o número (com ou sem DDD, com ou sem formatação) e o sistema busca em toda a base de 65 milhões de empresas brasileiras.</p>
+
+<p>Exemplos que funcionam:</p>
+<ul>
+<li><strong>11 3000-1234</strong></li>
+<li><strong>(11) 30001234</strong></li>
+<li><strong>1130001234</strong></li>
+</ul>
+
+<p>O resultado mostra razão social, CNPJ completo, situação cadastral, endereço e CNAE da empresa vinculada ao número.</p>
+
+<h2>O que você consegue ver pelo telefone</h2>
+<ul>
+<li><strong>Razão social e nome fantasia</strong> — nome oficial da empresa</li>
+<li><strong>CNPJ completo</strong> — para consultas futuras</li>
+<li><strong>Situação cadastral</strong> — ativa, baixada, suspensa ou inapta</li>
+<li><strong>Endereço</strong> — onde a empresa está registrada</li>
+<li><strong>CNAE</strong> — o que a empresa faz oficialmente</li>
+<li><strong>Capital social e porte</strong></li>
+</ul>
+
+<p>Com cadastro grátis, você também vê o <strong>quadro societário completo</strong> — quem são os sócios da empresa por trás do número.</p>
+
+<h2>Por que o telefone aparece no CNPJ?</h2>
+<p>Quando uma empresa abre ou atualiza seu cadastro na Receita Federal, ela declara telefone de contato. Esse dado é público e faz parte dos dados cadastrais do CNPJ. Nem toda empresa mantém o número atualizado, então é normal não encontrar todos os números — mas a maioria das empresas ativas com mais de 2 anos de operação tem ao menos um telefone registrado.</p>
+
+<h2>Casos em que a busca por telefone é útil</h2>
+<ul>
+<li><strong>Recebeu uma ligação suspeita</strong> — verifique se é empresa ativa ou se o número está associado a uma empresa baixada</li>
+<li><strong>Quer fechar negócio</strong> — confirme se a empresa que te ligou existe e está regular</li>
+<li><strong>Cobrança ou financeiro</strong> — identifique a empresa antes de pagar qualquer boleto</li>
+<li><strong>Due diligence rápida</strong> — valide o fornecedor antes de assinar contrato</li>
+</ul>
+
+<h2>E se não encontrar o número?</h2>
+<p>Nem todo telefone está cadastrado na Receita Federal. Se não aparecer resultado, tente:</p>
+<ul>
+<li>Buscar só com o DDD + número sem formatação</li>
+<li>Buscar com variações (fixo vs celular)</li>
+<li>Buscar pelo nome fantasia da empresa se você tiver alguma pista</li>
+</ul>
+<p>Empresas MEI e microempresas abertas recentemente às vezes ainda não têm telefone atualizado na base da Receita.</p>
+
+<h2>Perguntas frequentes</h2>
+
+<h3>Dá pra pesquisar qualquer número de telefone?</h3>
+<p>Sim, desde que o número esteja declarado no cadastro da Receita Federal. São dados públicos, disponíveis a qualquer cidadão. A busca funciona para fixos e celulares.</p>
+
+<h3>Precisa pagar para fazer a busca por telefone?</h3>
+<p>A busca básica e a identificação da empresa são gratuitas. Com <a href="/cadastro">cadastro grátis</a> você acessa também o telefone completo (não mascarado) e o quadro societário.</p>
+
+<h3>Posso descobrir quem é o sócio pelo telefone da empresa?</h3>
+<p>Sim. Após identificar a empresa pelo telefone, acesse a <a href="/buscar">página da empresa</a> para ver o quadro societário com nome dos sócios, qualificação e data de entrada — dados da Receita Federal.</p>
+
+<p><a href="/buscar" class="inline-block mt-4 bg-[#0F4C81] text-white rounded-lg px-5 py-2 font-medium text-sm hover:bg-[#0a3a66] transition">Pesquisar empresa por telefone →</a></p>`,
+  },
+
+  {
+    slug: "mesmos-socios-empresas-diferentes-permitido",
+    title: "Mesmos sócios em empresas diferentes: é permitido?",
+    excerpt: "Uma pessoa pode ser sócia de várias empresas ao mesmo tempo? Entenda as regras, exceções e como consultar todas as empresas de um sócio pelo CPF ou nome.",
+    category: "Sócios e QSA",
+    publishedAt: "2026-06-06",
+    updatedAt: "2026-06-06",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 6,
+    keywords: ["mesmos sócios em empresas diferentes", "sócio em várias empresas", "consultar empresas de um sócio", "sócio múltiplas empresas permitido"],
+    body: `<p>Sim, é permitido. Uma mesma pessoa física pode ser sócia de quantas empresas quiser ao mesmo tempo — não há limite legal no Brasil. Mas há situações específicas onde isso gera impedimentos, restrições fiscais ou riscos que valem conhecer.</p>
+
+<h2>O que a lei diz</h2>
+<p>Não existe lei brasileira que proíba uma pessoa de ser sócia de múltiplas empresas simultaneamente. O Código Civil (Lei 10.406/2002) e a Lei das Sociedades Anônimas (Lei 6.404/1976) não estabelecem esse limite.</p>
+
+<p>Na prática, é comum encontrar empreendedores com 3, 5 ou até dezenas de empresas abertas no CNPJ — especialmente holdings, grupos empresariais e estruturas de planejamento tributário.</p>
+
+<h2>Quando ser sócio de várias empresas gera problema</h2>
+
+<h3>Empresas no Simples Nacional</h3>
+<p>Aqui existe uma regra importante: se um sócio tiver participação em outras empresas e a <strong>soma do faturamento de todas ultrapassar R$ 4,8 milhões por ano</strong>, nenhuma delas pode optar pelo Simples Nacional. O fisco olha para o conjunto, não para cada empresa separadamente.</p>
+
+<h3>MEI especificamente</h3>
+<p>O MEI tem restrição mais rígida: o titular de uma empresa individual de microempreendedor individual <strong>não pode ser sócio, administrador ou titular de outra empresa</strong>. Se quiser abrir uma segunda empresa, precisa primeiro desenquadrar o MEI.</p>
+
+<h3>Licitações públicas</h3>
+<p>Em alguns processos licitatórios, empresas com sócios comuns são impedidas de participar simultaneamente do mesmo certame — para evitar conluio entre concorrentes do mesmo grupo.</p>
+
+<h3>Dívidas e responsabilidade</h3>
+<p>Em empresas limitadas (LTDA), a responsabilidade dos sócios é limitada ao capital social. Mas em caso de desconsideração da personalidade jurídica por fraude, o patrimônio pessoal do sócio pode responder — e se ele for sócio de outras empresas, essas também podem ser afetadas.</p>
+
+<h2>Como consultar todas as empresas de um sócio</h2>
+<p>O Quadro de Sócios e Administradores (QSA) da Receita Federal é público. No Jurídico Online, você pode:</p>
+<ol>
+<li>Buscar o nome da pessoa em <a href="/socios">nossa busca de sócios</a></li>
+<li>Ver todas as empresas onde ela figura como sócia ou representante</li>
+<li>Verificar a situação cadastral de cada empresa (ativa, baixada, inapta)</li>
+<li>Ver a qualificação (sócio-administrador, diretor, etc.) e data de entrada em cada empresa</li>
+</ol>
+
+<p>Esse cruzamento é valioso para due diligence: antes de contratar um fornecedor ou fechar uma parceria, verifique se os sócios têm histórico de empresas inaptas, baixadas irregularmente ou com padrão de abandono.</p>
+
+<h2>Como identificar grupos empresariais pelo QSA</h2>
+<p>Quando várias empresas têm os mesmos sócios, isso frequentemente indica:</p>
+<ul>
+<li><strong>Holding</strong> — empresa que controla as demais</li>
+<li><strong>Grupo econômico</strong> — empresas do mesmo dono em setores diferentes</li>
+<li><strong>Estrutura de proteção patrimonial</strong> — separação de riscos entre CNPJs</li>
+<li><strong>Fraude</strong> (mais raro) — uso de laranjas para esconder o real controlador</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+
+<h3>Posso ser sócio de uma empresa concorrente?</h3>
+<p>Depende do contrato social e de acordos de acionistas. Não há lei geral proibindo, mas muitos contratos incluem cláusula de não-concorrência entre sócios. Verifique o contrato social da empresa.</p>
+
+<h3>Ser sócio de empresa inativa prejudica minha outra empresa?</h3>
+<p>Não diretamente, mas pode afetar a pontuação em análises de crédito e licitações. Empresas cujos sócios têm histórico de CNPJs baixados irregularmente ou inaptos podem ter dificuldade em abrir contas PJ ou obter crédito.</p>
+
+<h3>Como saber quantas empresas tenho abertas no meu CPF?</h3>
+<p>Consulte diretamente no <a href="/socios">Jurídico Online</a> buscando pelo seu nome. Todos os vínculos societários registrados na Receita Federal aparecem — incluindo empresas que você esqueceu de baixar.</p>
+
+<p><a href="/socios" class="inline-block mt-4 bg-[#0F4C81] text-white rounded-lg px-5 py-2 font-medium text-sm hover:bg-[#0a3a66] transition">Consultar empresas de um sócio →</a></p>`,
+  },
+
+  {
+    slug: "como-saber-se-empresa-e-confiavel",
+    title: "Como saber se uma empresa é confiável antes de fechar negócio",
+    excerpt: "Antes de pagar, assinar contrato ou fechar parceria, verifique esses 7 pontos no CNPJ da empresa. Dados públicos que revelam se a empresa é séria ou um risco.",
+    category: "Due Diligence",
+    publishedAt: "2026-06-06",
+    updatedAt: "2026-06-06",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 7,
+    keywords: ["como saber se empresa é confiável", "verificar empresa antes de fechar negócio", "empresa confiável cnpj", "como verificar idoneidade empresa"],
+    body: `<p>Antes de pagar um fornecedor, contratar um prestador de serviço ou fechar uma parceria comercial, existe uma verificação que leva menos de 5 minutos e pode evitar uma dor de cabeça enorme: checar o CNPJ da empresa. Os dados públicos da Receita Federal revelam mais sobre uma empresa do que muita gente imagina.</p>
+
+<h2>7 pontos para verificar no CNPJ</h2>
+
+<h3>1. Situação cadastral — o mais importante</h3>
+<p>Uma empresa com situação <strong>ATIVA</strong> está regularmente registrada na Receita Federal. Qualquer outro status é sinal de alerta:</p>
+<ul>
+<li><strong>INAPTA</strong> — não entregou declarações por 2 anos ou mais. Não pode emitir nota fiscal válida.</li>
+<li><strong>SUSPENSA</strong> — irregularidade cadastral em apuração</li>
+<li><strong>BAIXADA</strong> — encerrada. Qualquer contrato assinado com uma empresa baixada é problemático.</li>
+</ul>
+<p>Se a empresa que está te vendendo algo está INAPTA, as notas fiscais que ela emite podem ser glosadas pela Receita — e o prejuízo pode ser seu, não dela.</p>
+
+<h3>2. Tempo de operação</h3>
+<p>Empresas com mais de 3 anos de atividade têm mais credibilidade do que empresas abertas há 2 meses. Veja a <strong>data de abertura</strong> no CNPJ. Uma empresa nova não é necessariamente desonesta, mas merece mais cautela e verificação de referências.</p>
+
+<h3>3. CNAE — o que a empresa faz de fato</h3>
+<p>O CNAE (Código Nacional de Atividade Econômica) diz qual é a atividade oficial da empresa. Desconfie quando o CNAE não bate com o serviço oferecido. Uma empresa com CNAE de "comércio de alimentos" que oferece serviços de TI é um sinal de irregularidade — ela provavelmente não tem o registro adequado para o que faz.</p>
+
+<h3>4. Quadro societário — quem está por trás</h3>
+<p>Verifique os sócios. Com <a href="/cadastro">cadastro grátis no Jurídico Online</a>, você vê nome completo, qualificação e data de entrada de cada sócio. Daí pesquise os sócios:</p>
+<ul>
+<li>Eles têm outras empresas abertas? Em que situação estão?</li>
+<li>Alguma empresa anterior desses sócios foi encerrada com irregularidade?</li>
+<li>O sócio-administrador é a mesma pessoa que assina os contratos?</li>
+</ul>
+
+<h3>5. Endereço — existe de verdade?</h3>
+<p>O endereço no CNPJ é declarado pela empresa. Não é raro encontrar empresas com endereço em coworking, endereço fiscal inexistente ou o mesmo endereço compartilhado com dezenas de outras empresas. Para contratos de valor alto, vale confirmar o endereço físico antes de assinar.</p>
+
+<h3>6. Capital social — comprometimento financeiro</h3>
+<p>O capital social declarado indica o quanto os sócios investiram formalmente na empresa. Uma empresa com capital social de R$ 1.000 que te vende um projeto de R$ 500.000 não tem lastro financeiro proporcional ao risco que você está assumindo.</p>
+
+<h3>7. Porte da empresa</h3>
+<p>ME (Microempresa), EPP (Empresa de Pequeno Porte) ou Demais — o porte informa a faixa de faturamento declarada. Desconfie quando o serviço ou produto oferecido parece muito grande para o porte da empresa.</p>
+
+<h2>Como fazer essa verificação em 5 minutos</h2>
+<ol>
+<li>Acesse <a href="/buscar">Jurídico Online</a></li>
+<li>Digite o CNPJ ou razão social da empresa</li>
+<li>Verifique situação, data de abertura, CNAE e endereço (gratuito, sem login)</li>
+<li><a href="/cadastro">Crie sua conta grátis</a> para ver os sócios completos</li>
+<li>Pesquise os sócios em <a href="/socios">nossa busca de sócios</a> para ver outras empresas vinculadas</li>
+</ol>
+
+<h2>Além do CNPJ: outras fontes para verificar</h2>
+<ul>
+<li><strong>Reclame Aqui</strong> — reclamações de consumidores</li>
+<li><strong>Cadastro de Empregadores do MTE</strong> — empresas com histórico de trabalho análogo à escravidão</li>
+<li><strong>CEIS (gov.br)</strong> — empresas sancionadas por contratos com o governo</li>
+<li><strong>Protestos e SPC/Serasa</strong> — dívidas comerciais (requer consulta paga)</li>
+<li><strong>Jurídico em Pauta</strong> — atos em diários oficiais envolvendo a empresa</li>
+</ul>
+
+<h2>Sinais de alerta que combinados indicam risco alto</h2>
+<p>Nenhum sinal isolado significa necessariamente que a empresa é desonesta. Mas quando vários aparecem juntos, redobre a cautela:</p>
+<ul>
+<li>Empresa aberta há menos de 6 meses</li>
+<li>Capital social abaixo de R$ 1.000</li>
+<li>CNAE não condiz com o serviço</li>
+<li>Sócio com outras empresas baixadas ou inaptas</li>
+<li>Endereço compartilhado com mais de 10 empresas</li>
+<li>Situação INAPTA ou SUSPENSA</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+
+<h3>Empresa com situação ativa é garantia de que é confiável?</h3>
+<p>Não é garantia total, mas é o pré-requisito mínimo. Situação ATIVA significa que a empresa está em dia com suas obrigações cadastrais na Receita Federal. Isso não impede que ela tenha dívidas privadas, processos trabalhistas ou má reputação comercial.</p>
+
+<h3>Consigo verificar se a empresa tem dívidas pelo CNPJ?</h3>
+<p>Dívidas com a Receita Federal (Dívida Ativa) aparecem na <strong>Certidão Negativa de Débitos (CND)</strong>, obtida gratuitamente no portal da Receita. Já dívidas privadas (fornecedores, bancos) exigem consulta ao SPC/Serasa, que é paga.</p>
+
+<h3>O que fazer se a empresa não tem CNPJ ou o CNPJ é falso?</h3>
+<p>Não feche negócio. Toda empresa brasileira que emite nota fiscal precisa de CNPJ. Pessoa física que presta serviços pode usar CPF, mas deve emitir recibo ou RPA. Qualquer empresa que se recuse a informar CNPJ é um sinal vermelho.</p>
+
+<p><a href="/buscar" class="inline-block mt-4 bg-[#0F4C81] text-white rounded-lg px-5 py-2 font-medium text-sm hover:bg-[#0a3a66] transition">Verificar uma empresa agora →</a></p>`,
+  },
 ];
 
 export function getPost(slug: string): BlogPost | null {

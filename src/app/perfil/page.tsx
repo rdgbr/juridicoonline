@@ -5,8 +5,9 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { ProfileForm } from "./ProfileForm";
 import { DeleteAccountSection } from "./DeleteAccountSection";
-import { formatCNPJ } from "@/lib/cnpj";
-import { Eye, Download, Calendar, Sparkles, Mail } from "lucide-react";
+import { formatCNPJ, razaoSocialDisplay, empresaSlug } from "@/lib/cnpj";
+import { getEmpresasByCNPJs } from "@/lib/meili";
+import { Eye, Download, Calendar, Sparkles, Mail, Bell } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Meu perfil",
@@ -24,7 +25,7 @@ export default async function PerfilPage() {
     redirect("/login?next=/perfil");
   }
 
-  const [user, consultationsCount, recentConsultations, dailyActivity] = await Promise.all([
+  const [user, consultationsCount, recentConsultations, dailyActivity, watches] = await Promise.all([
     prisma.user.findUnique({ where: { id: userId } }),
     prisma.consultation.count({ where: { userId } }),
     prisma.consultation.findMany({
@@ -39,9 +40,18 @@ export default async function PerfilPage() {
       WHERE "userId" = ${userId} AND "createdAt" >= NOW() - INTERVAL '30 days'
       GROUP BY day ORDER BY day ASC
     `,
+    prisma.companyWatch.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
   ]);
 
   if (!user) redirect("/login?next=/perfil");
+
+  // Enrich recent consultations with company names from MeiliSearch
+  const cnpjsToLookup = recentConsultations.map(c => c.cnpj);
+  const empresasMap = await getEmpresasByCNPJs(cnpjsToLookup);
 
   // Build last 30 days map for the chart (fill gaps with 0)
   const activityMap = new Map<string, number>();
@@ -222,6 +232,51 @@ export default async function PerfilPage() {
         </section>
       )}
 
+      {/* Empresas monitoradas */}
+      {watches.length > 0 && (
+        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <Bell className="h-5 w-5 text-amber-500" />
+              Monitorando
+            </h2>
+            <span className="text-xs text-slate-400">{watches.length} empresa{watches.length > 1 ? "s" : ""}</span>
+          </div>
+          <div className="divide-y divide-slate-100 text-sm">
+            {watches.map((w) => {
+              const emp = empresasMap.get(w.cnpj);
+              const razao = emp ? (razaoSocialDisplay(emp.razao_social) || emp.razao_social) : w.razaoSocial || w.cnpj;
+              const sit = emp?.situacao || w.situacao;
+              const slug = emp ? empresaSlug(w.cnpj, emp.razao_social) : w.cnpj;
+              return (
+                <Link
+                  key={w.id}
+                  href={`/empresa/${slug}`}
+                  className="py-3 flex items-center justify-between gap-3 hover:bg-slate-50 -mx-2 px-2 rounded transition group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="rounded-lg bg-amber-50 text-amber-600 p-2 shrink-0">
+                      <Bell className="h-3.5 w-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-medium text-slate-900 group-hover:text-[#0F4C81] truncate">{razao}</div>
+                      <div className="text-xs text-slate-500 font-mono">{formatCNPJ(w.cnpj)}</div>
+                    </div>
+                  </div>
+                  {sit && (
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${
+                      sit === "ATIVA" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
+                    }`}>
+                      {sit}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {/* Recent consultations */}
       <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
         <div className="flex items-center justify-between mb-4">
@@ -242,34 +297,56 @@ export default async function PerfilPage() {
           </p>
         ) : (
           <div className="divide-y divide-slate-100 text-sm">
-            {recentConsultations.map((c) => (
-              <Link
-                key={c.id}
-                href={`/empresa/${c.cnpj}`}
-                className="py-3 flex items-center justify-between gap-3 hover:bg-slate-50 -mx-2 px-2 rounded transition group"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="rounded-lg bg-slate-100 text-slate-600 p-2 shrink-0">
-                    <Eye className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-mono text-slate-900 group-hover:text-[#0F4C81]">
-                      {formatCNPJ(c.cnpj)}
+            {recentConsultations.map((c) => {
+              const emp = empresasMap.get(c.cnpj);
+              const razao = emp ? (razaoSocialDisplay(emp.razao_social) || emp.razao_social) : null;
+              const sit = emp?.situacao;
+              const slug = emp ? empresaSlug(c.cnpj, emp.razao_social) : c.cnpj;
+              return (
+                <Link
+                  key={c.id}
+                  href={`/empresa/${slug}`}
+                  className="py-3 flex items-center justify-between gap-3 hover:bg-slate-50 -mx-2 px-2 rounded transition group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="rounded-lg bg-slate-100 text-slate-600 p-2 shrink-0">
+                      <Eye className="h-3.5 w-3.5" />
                     </div>
-                    <div className="text-xs text-slate-500 capitalize">{c.type}</div>
+                    <div className="min-w-0">
+                      {razao ? (
+                        <>
+                          <div className="font-medium text-slate-900 group-hover:text-[#0F4C81] truncate">{razao}</div>
+                          <div className="text-xs text-slate-500 font-mono flex items-center gap-2">
+                            {formatCNPJ(c.cnpj)}
+                            {sit && (
+                              <span className={`px-1.5 py-0 rounded ${sit === "ATIVA" ? "text-emerald-600" : "text-rose-500"}`}>
+                                {sit}
+                              </span>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="font-mono text-slate-900 group-hover:text-[#0F4C81]">
+                            {formatCNPJ(c.cnpj)}
+                          </div>
+                          <div className="text-xs text-slate-500 capitalize">{c.type}</div>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <time className="text-xs text-slate-400 shrink-0">
-                  {new Intl.DateTimeFormat("pt-BR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }).format(c.createdAt)}
-                </time>
-              </Link>
-            ))}
+                  <time className="text-xs text-slate-400 shrink-0">
+                    {new Intl.DateTimeFormat("pt-BR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }).format(c.createdAt)}
+                  </time>
+                </Link>
+              );
+            })}
           </div>
         )}
       </section>

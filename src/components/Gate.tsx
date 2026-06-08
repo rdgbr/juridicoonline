@@ -53,6 +53,10 @@ export function Gate({
               Já tenho conta →
             </Link>
           </div>
+
+          <p className="mt-4 text-xs text-slate-400">
+            Mais de 5.000 contadores, advogados e analistas já consultam diariamente.
+          </p>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { cadastroAction, type CadastroState } from "./actions";
 
@@ -8,6 +8,18 @@ const initial: CadastroState = {};
 
 export function CadastroForm({ nextPath }: { nextPath?: string }) {
   const [state, formAction] = useActionState(cadastroAction, initial);
+
+  // Server Action ID muda a cada deploy. Usuário com página antiga aberta
+  // recebe erro silencioso ao submeter. Reload automático resolve.
+  useEffect(() => {
+    const handler = (e: ErrorEvent) => {
+      if (e.message?.includes("Server Action") || e.message?.includes("Failed to find")) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener("error", handler);
+    return () => window.removeEventListener("error", handler);
+  }, []);
 
   return (
     <form action={formAction} className="space-y-4">

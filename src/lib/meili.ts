@@ -96,6 +96,25 @@ export async function getEmpresaByCNPJ(cnpj: string): Promise<Empresa | null> {
   }
 }
 
+export async function getEmpresasByCNPJs(cnpjs: string[]): Promise<Map<string, Empresa>> {
+  if (cnpjs.length === 0) return new Map();
+  const clean = cnpjs.map(c => c.replace(/\D/g, "")).filter(c => c.length === 14);
+  if (clean.length === 0) return new Map();
+  const filter = clean.map(c => `cnpj_completo = "${c}"`).join(" OR ");
+  try {
+    const res = await empresasIndex.search<Empresa>("", {
+      filter,
+      limit: clean.length,
+      attributesToRetrieve: ["cnpj_completo", "razao_social", "situacao", "municipio_nome", "uf"],
+    });
+    const map = new Map<string, Empresa>();
+    for (const hit of res.hits) map.set(hit.cnpj_completo, hit);
+    return map;
+  } catch {
+    return new Map();
+  }
+}
+
 export async function countByUF(uf: string, ativasOnly = true): Promise<number> {
   const filter: string[] = [`uf = "${uf.toUpperCase()}"`];
   if (ativasOnly) filter.push('situacao = "ATIVA"');

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Analytics } from "@/components/Analytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,15 +17,10 @@ const geistMono = Geist_Mono({
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://juridicoonline.com.br";
 
-// Cloudflare Web Analytics — sem PII, sem cookies, free. Token vem do dashboard:
-//   dash.cloudflare.com → Analytics → Web Analytics → Add a site → token JSON
-// Sem token, o beacon não é renderizado (zero overhead).
 const CF_ANALYTICS_TOKEN = process.env.NEXT_PUBLIC_CF_ANALYTICS_TOKEN || "";
-// Bing Webmaster verification — meta tag pra ativar a propriedade
-// (Bing Webmaster Tools → Add site → HTML meta tag)
-const BING_VERIFY = process.env.NEXT_PUBLIC_BING_VERIFY || "";
-// Yandex Webmaster — só registra propriedade
-const YANDEX_VERIFY = process.env.NEXT_PUBLIC_YANDEX_VERIFY || "";
+const BING_VERIFY        = process.env.NEXT_PUBLIC_BING_VERIFY || "";
+const YANDEX_VERIFY      = process.env.NEXT_PUBLIC_YANDEX_VERIFY || "";
+
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -175,8 +171,10 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        {/* Cloudflare Web Analytics — só carrega se token configurado.
-            defer = não bloqueia LCP. Sem cookies, sem PII, LGPD-safe. */}
+        {/* Analytics — GA4 + Hotjar (NEXT_PUBLIC_ baked no build) */}
+        <Analytics />
+
+        {/* ── Cloudflare Web Analytics — sem cookies, LGPD-safe ────────── */}
         {CF_ANALYTICS_TOKEN && (
           <script
             defer

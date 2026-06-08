@@ -94,6 +94,61 @@ export async function getSociosByCnpj(cnpj: string): Promise<Socio[]> {
   }
 }
 
+export type SocioSearchHit = {
+  nome: string;
+  nomeSlug: string;
+  count: number; // quantas empresas este sócio tem
+};
+
+/**
+ * Busca sócios por nome no Postgres.
+ * Converte a query para slug e usa prefix scan no índice de nomeSlug (rápido).
+ * Fallback: se slug completo não achar, tenta com o primeiro termo.
+ */
+export async function searchSociosByQuery(q: string, limit = 8): Promise<SocioSearchHit[]> {
+  const rawSlug = (q || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9\s]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+
+  if (rawSlug.length < 2) return [];
+
+  try {
+    // Prefix scan — usa o índice B-tree em nomeSlug (eficiente em 25M linhas)
+    const rows = await prisma.$queryRaw<Array<{ nome: string; nome_slug: string; n: bigint }>>`
+      SELECT nome, "nomeSlug" AS nome_slug, COUNT(*) AS n
+      FROM "Socio"
+      WHERE "nomeSlug" LIKE ${rawSlug + "%"}
+      GROUP BY nome, "nomeSlug"
+      ORDER BY n DESC, nome ASC
+      LIMIT ${limit}
+    `;
+
+    // Fallback: se não achou com slug completo, tenta só o primeiro termo
+    if (rows.length === 0 && rawSlug.includes("-")) {
+      const firstTerm = rawSlug.split("-")[0];
+      const fallback = await prisma.$queryRaw<Array<{ nome: string; nome_slug: string; n: bigint }>>`
+        SELECT nome, "nomeSlug" AS nome_slug, COUNT(*) AS n
+        FROM "Socio"
+        WHERE "nomeSlug" LIKE ${firstTerm + "%"}
+        GROUP BY nome, "nomeSlug"
+        ORDER BY n DESC, nome ASC
+        LIMIT ${limit}
+      `;
+      return fallback.map(r => ({ nome: r.nome, nomeSlug: r.nome_slug, count: Number(r.n) }));
+    }
+
+    return rows.map(r => ({ nome: r.nome, nomeSlug: r.nome_slug, count: Number(r.n) }));
+  } catch (e) {
+    console.error("[socios] searchSociosByQuery error", e);
+    return [];
+  }
+}
+
 /**
  * Get all empresas where a person/entity is a sócio.
  * Searches by exact nomeSlug match first, then by ILIKE on nome.

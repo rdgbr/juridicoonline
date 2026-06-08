@@ -38,14 +38,10 @@ export async function cadastroAction(_prev: CadastroState, formData: FormData): 
       const field = issue.path[0] as string;
       if (field === "email" || field === "name") fe[field] = issue.message;
     }
-    return {
-      error: "Verifique os campos preenchidos.",
-      fieldErrors: fe,
-    };
+    return { error: "Verifique os campos preenchidos.", fieldErrors: fe };
   }
   const data = parsed.data;
 
-  // Capture lead immediately (so we never lose it even if user doesn't verify)
   const h = await headers();
   const ip = (h.get("x-forwarded-for") || "").split(",")[0].trim() || null;
   const ua = h.get("user-agent") || null;
@@ -67,7 +63,6 @@ export async function cadastroAction(_prev: CadastroState, formData: FormData): 
     console.error("[cadastro] lead save error", e);
   }
 
-  // Pre-create user with name/purpose so it persists after magic-link verification
   try {
     await prisma.user.upsert({
       where: { email: data.email },
@@ -91,19 +86,20 @@ export async function cadastroAction(_prev: CadastroState, formData: FormData): 
     console.error("[cadastro] user upsert error", e);
   }
 
-  // Admin notification (with full context — runs in background)
-  notifyAdminSignup({
-    email: data.email,
-    name: data.name,
-    purpose: data.purpose,
-    ip,
-    ua,
-  }).catch((e) => console.error("[cadastro] admin notify error", e));
+  notifyAdminSignup({ email: data.email, name: data.name, purpose: data.purpose, ip, ua })
+    .catch((e) => console.error("[cadastro] admin notify error", e));
 
-  // Trigger magic link email (signIn throws NEXT_REDIRECT internally)
-  await signIn("nodemailer", {
-    email: data.email,
-    redirectTo: data.next && data.next.startsWith("/") ? data.next : "/",
-  });
+  try {
+    await signIn("nodemailer", {
+      email: data.email,
+      redirectTo: data.next && data.next.startsWith("/") ? data.next : "/",
+    });
+  } catch (e: unknown) {
+    const digest = e && typeof e === "object" && "digest" in e ? (e as { digest: string }).digest : "";
+    if (digest.startsWith("NEXT_REDIRECT")) throw e;
+    console.error("[cadastro] signIn error:", (e as Error).message);
+    return { error: "Erro ao enviar o link de acesso. Tente novamente em alguns minutos." };
+  }
+
   return { ok: true };
 }

@@ -7,8 +7,9 @@ import { getEmpresaByCNPJ, getRelatedEmpresas, ufNome } from "@/lib/meili";
 import { getSociosByCnpj, qualificacaoLabel, socioSlug } from "@/lib/socios";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
-import { Gate } from "@/components/Gate";
 import { AdSlot } from "@/components/AdSlot";
+import { ShareButton } from "@/components/ShareButton";
+import { WatchButton } from "@/components/WatchButton";
 import { SITE_URL } from "@/lib/seo";
 import {
   formatCNPJ,
@@ -19,8 +20,6 @@ import {
   parseEmpresaSlug,
   empresaSlug,
   age,
-  maskPhone,
-  maskEmail,
   onlyDigits,
   razaoSocialDisplay,
 } from "@/lib/cnpj";
@@ -120,15 +119,10 @@ export default async function EmpresaPage({ params }: Props) {
   const userId = (session?.user as { id?: string } | undefined)?.id;
   const isAuth = !!userId;
 
-  // SECURITY: when not authenticated, strip sensitive fields from the empresa
-  // object server-side BEFORE rendering — so they never appear in HTML/DevTools.
-  if (!isAuth) {
-    empresa.telefone1 = null;
-    empresa.telefone2 = null;
-    empresa.email = null;
-    empresa.tem_whatsapp = false;
-  } else {
-    // Log consultation (non-blocking)
+  // Dados abertos para todos — estratégia fase 1: ganhar relevância e engajamento.
+  // O cadastro fica para features de valor: histórico, alertas, monitoramento.
+  // Log de consulta apenas para usuários logados (analytics de comportamento).
+  if (userId) {
     const h = await headers();
     const ip = (h.get("x-forwarded-for") || "").split(",")[0].trim() || null;
     const ua = h.get("user-agent") || null;
@@ -175,11 +169,16 @@ export default async function EmpresaPage({ params }: Props) {
   const trendingViews = 200 + (cnpjNum % 4800); // 200-5000 range per company
   const trendingThisWeek = 30 + (cnpjNum % 270); // 30-300 range
 
-  // Parallel fetch: related companies + socios (avoids sequential Meili+PG roundtrips)
-  const [related, socios] = await Promise.all([
+  // Parallel fetch: related companies + socios + watch status
+  const [related, socios, watchRecord] = await Promise.all([
     getRelatedEmpresas(empresa, 24),
     getSociosByCnpj(empresa.cnpj_completo),
+    userId
+      ? prisma.companyWatch.findUnique({ where: { userId_cnpj: { userId, cnpj: empresa.cnpj_completo } } })
+      : Promise.resolve(null),
   ]);
+
+  const isWatching = !!watchRecord;
 
   // ─── JSON-LD structured data ─────────────────────────────────
   const jsonLdOrg = {
@@ -347,6 +346,24 @@ export default async function EmpresaPage({ params }: Props) {
                 <span><span className="text-slate-400">Aberta em:</span> {formatDate(empresa.data_inicio_atividade)} ({age(empresa.data_inicio_atividade)})</span>
               )}
             </div>
+
+            {/* Action buttons */}
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <ShareButton
+                url={canonicalUrl}
+                razao={razaoDisp}
+                cnpj={cnpjFmt}
+                situacao={empresa.situacao || "—"}
+              />
+              <WatchButton
+                cnpj={empresa.cnpj_completo}
+                razaoSocial={razaoDisp}
+                situacao={empresa.situacao || ""}
+                initialWatching={isWatching}
+                isAuth={isAuth}
+                canonicalSlug={canonicalSlug}
+              />
+            </div>
           </div>
         </div>
       </header>
@@ -403,16 +420,17 @@ export default async function EmpresaPage({ params }: Props) {
         </InfoCard>
       </section>
 
-      {/* Contato — gated */}
+      {/* Contato — aberto para todos */}
       <section className="mt-8" id="contato">
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           <Phone className="h-5 w-5 text-[#0F4C81]" />
           Contato
         </h2>
-
-        {isAuth ? (
+        {empresa.telefone1 || empresa.email ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ContactCard label="Telefone principal" value={formatPhone(empresa.telefone1)} icon={<Phone className="h-4 w-4" />} highlight={!!empresa.tem_whatsapp} highlightLabel="WhatsApp" />
+            {empresa.telefone1 && (
+              <ContactCard label="Telefone principal" value={formatPhone(empresa.telefone1)} icon={<Phone className="h-4 w-4" />} highlight={!!empresa.tem_whatsapp} highlightLabel="WhatsApp" />
+            )}
             {empresa.telefone2 && onlyDigits(empresa.telefone2).length > 0 && (
               <ContactCard label="Telefone secundário" value={formatPhone(empresa.telefone2)} icon={<Phone className="h-4 w-4" />} />
             )}
@@ -421,28 +439,18 @@ export default async function EmpresaPage({ params }: Props) {
             )}
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <ContactCard label="Telefone" value={maskPhone(empresa.telefone1)} icon={<Phone className="h-4 w-4" />} masked />
-              <ContactCard label="E-mail" value={maskEmail(empresa.email)} icon={<Mail className="h-4 w-4" />} masked />
-            </div>
-            <Gate
-              title="Veja telefones, e-mail e WhatsApp completos"
-              description="Cadastre-se grátis em 30 segundos para liberar todos os contatos desta e de outras 65 milhões de empresas."
-              redirectTo={`/empresa/${canonicalSlug}#contato`}
-            />
-          </>
+          <p className="text-sm text-slate-500">Nenhum contato declarado na Receita Federal para este CNPJ.</p>
         )}
       </section>
 
-      {/* Sócios — gated */}
+      {/* Sócios — aberto para todos */}
       <section className="mt-10">
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           <Users className="h-5 w-5 text-[#0F4C81]" />
           Quadro societário
         </h2>
-        {isAuth ? (
-          socios.length > 0 ? (
+        {socios.length > 0 ? (
+          <>
             <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
               <ul className="divide-y divide-slate-100">
                 {socios.map((s) => (
@@ -452,10 +460,7 @@ export default async function EmpresaPage({ params }: Props) {
                         <Users className="h-4 w-4" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <Link
-                          href={`/socio/${socioSlug(s.nome)}`}
-                          className="font-medium text-slate-900 hover:text-[#0F4C81]"
-                        >
+                        <Link href={`/socio/${socioSlug(s.nome)}`} className="font-medium text-slate-900 hover:text-[#0F4C81]">
                           {s.nome}
                         </Link>
                         <div className="text-xs text-slate-500 mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5">
@@ -474,20 +479,24 @@ export default async function EmpresaPage({ params }: Props) {
                 Dados oficiais do Quadro de Sócios e Administradores (QSA) — Receita Federal
               </div>
             </div>
-          ) : (
-            <div className="rounded-xl border border-slate-200 bg-white p-5">
-              <p className="text-sm text-slate-600">
-                Esta empresa não possui sócios cadastrados na base pública do QSA (Receita Federal)
-                ou os dados ainda não foram indexados.
-              </p>
-            </div>
-          )
+            {/* CTA soft — por features, não por dados */}
+            {!isAuth && (
+              <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 flex items-center justify-between gap-4 flex-wrap">
+                <p className="text-sm text-slate-600">
+                  <strong>Salve seu histórico</strong> e receba alertas quando esta empresa mudar de situação.
+                </p>
+                <Link href={`/cadastro?next=/empresa/${canonicalSlug}`} className="shrink-0 text-sm font-medium text-[#0F4C81] hover:underline">
+                  Criar conta grátis →
+                </Link>
+              </div>
+            )}
+          </>
         ) : (
-          <Gate
-            title="Veja todos os sócios e suas participações"
-            description="Cadastre-se grátis para acessar quadro societário, qualificações, datas de entrada e empresas relacionadas a cada sócio."
-            redirectTo={`/empresa/${canonicalSlug}`}
-          />
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="text-sm text-slate-600">
+              Esta empresa não possui sócios cadastrados na base pública do QSA (Receita Federal).
+            </p>
+          </div>
         )}
       </section>
 
@@ -584,14 +593,27 @@ export default async function EmpresaPage({ params }: Props) {
   );
 }
 
+// Badge maior e mais visual — verde/vermelho/cinza por situação
 function Badge({ ativo, text }: { ativo: boolean; text: string }) {
+  const isBaixada = text?.toLowerCase().includes("baixada");
+  const isInapta  = text?.toLowerCase().includes("inapta");
+  const isSuspensa = text?.toLowerCase().includes("suspensa");
+
+  const style = ativo
+    ? "bg-emerald-500 text-white"
+    : (isBaixada || isInapta || isSuspensa)
+      ? "bg-rose-500 text-white"
+      : "bg-slate-400 text-white";
+
+  const dot = ativo
+    ? "bg-white animate-pulse"
+    : (isBaixada || isInapta || isSuspensa)
+      ? "bg-white"
+      : "bg-white/70";
+
   return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
-        ativo ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
-      }`}
-    >
-      <span className={`h-1.5 w-1.5 rounded-full ${ativo ? "bg-emerald-500" : "bg-rose-500"}`} />
+    <span className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 text-sm font-semibold ${style}`}>
+      <span className={`h-2 w-2 rounded-full ${dot}`} />
       {text}
     </span>
   );
