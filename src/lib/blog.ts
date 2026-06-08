@@ -1874,6 +1874,238 @@ export const POSTS: BlogPost[] = [
 
 <p><a href="/buscar" class="inline-block mt-4 bg-[#0F4C81] text-white rounded-lg px-5 py-2 font-medium text-sm hover:bg-[#0a3a66] transition">Verificar uma empresa agora →</a></p>`,
   },
+
+  // ─── Post 1: Consultar QSA — SD 14, 5400/mês ─────────────────────────────
+  {
+    slug: "consultar-qsa-quadro-societario-guia",
+    title: "Como consultar o QSA (Quadro Societário) de qualquer empresa — guia 2026",
+    excerpt: "Aprenda a consultar o QSA de uma empresa em segundos. Descubra os sócios, administradores e qualificações pelo CNPJ, gratuitamente.",
+    category: "Consulta CNPJ",
+    publishedAt: "2026-06-08",
+    updatedAt: "2026-06-08",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 7,
+    keywords: ["consultar qsa", "quadro societario cnpj", "qsa cnpj", "quadro de socios e administradores", "consulta qsa gratis"],
+    body: `<p>O <strong>QSA (Quadro de Sócios e Administradores)</strong> é o registro oficial de todos os sócios, diretores e representantes legais de uma empresa no Brasil. Ele faz parte do CNPJ cadastrado na Receita Federal e é público — qualquer pessoa pode consultar gratuitamente.</p>
+
+<p>Neste guia você vai aprender a consultar o QSA de qualquer empresa em segundos, sem burocracia.</p>
+
+<p><a href="/buscar" class="inline-block my-4 bg-[#0F4C81] text-white rounded-lg px-5 py-2 font-medium text-sm hover:bg-[#0a3a66] transition">Pesquisar QSA grátis agora →</a></p>
+
+<h2>O que é o QSA?</h2>
+<p>QSA significa <strong>Quadro de Sócios e Administradores</strong>. É a lista oficial, mantida pela Receita Federal, com todos os responsáveis por uma empresa: quem são os sócios, qual a qualificação de cada um (sócio-administrador, sócio-cotista, diretor, presidente, etc.) e desde quando cada pessoa faz parte da sociedade.</p>
+
+<p>Toda empresa com CNPJ ativo no Brasil tem um QSA registrado. Empresas individuais (MEI, EI) têm apenas o titular. Empresas maiores podem ter dezenas de sócios ou fundos de investimento como cotistas.</p>
+
+<h2>Para que serve consultar o QSA?</h2>
+<ul>
+<li><strong>Due diligence</strong> — antes de fechar contrato, confirmar quem realmente controla a empresa</li>
+<li><strong>Verificar se um sócio tem outras empresas</strong> — detectar conflitos de interesse ou histórico</li>
+<li><strong>Cobrança e execução judicial</strong> — identificar os responsáveis legais para ações na Justiça</li>
+<li><strong>Compliance e KYC</strong> — bancos e fintechs consultam o QSA como parte da verificação de clientes PJ</li>
+<li><strong>Recrutamento</strong> — verificar o histórico societário de um candidato a executivo</li>
+</ul>
+
+<h2>Como consultar o QSA pelo CNPJ gratuitamente</h2>
+<p>Existem três formas principais:</p>
+
+<h3>1. Jurídico Online (recomendado — mais rápido)</h3>
+<p>Digite o CNPJ ou nome da empresa no <a href="/buscar">Jurídico Online</a>. O QSA completo aparece imediatamente na página da empresa: nome de cada sócio, qualificação, data de entrada e, quando disponível, o link para o perfil completo do sócio com todas as empresas que ele participa.</p>
+<p>Diferencial: você vê o histórico de participações do sócio — todas as empresas em que ele aparece como QSA, ativas ou baixadas.</p>
+
+<h3>2. Receita Federal (oficial, com captcha)</h3>
+<p>Acesse o <a href="https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp" target="_blank" rel="nofollow noopener">Comprovante de Situação Cadastral</a> da Receita Federal, informe o CNPJ e resolva o captcha. O PDF gerado contém o QSA. É oficial mas não permite buscar por nome do sócio.</p>
+
+<h3>3. Junta Comercial</h3>
+<p>Para dados mais detalhados (CPF integrais, percentual de participação), acesse a Junta Comercial do estado da empresa. A certidão simplificada é paga (R$ 20-50) mas contém o contrato social completo.</p>
+
+<h2>O que aparece no QSA?</h2>
+<ul>
+<li><strong>Nome do sócio ou administrador</strong> (pessoa física ou jurídica)</li>
+<li><strong>Qualificação</strong> — sócio-administrador, sócio, diretor, presidente, representante legal etc.</li>
+<li><strong>Data de entrada</strong> na sociedade</li>
+<li><strong>País de origem</strong> — para sócios estrangeiros</li>
+</ul>
+
+<p>O QSA da Receita Federal <strong>não</strong> mostra percentual de cotas, CPF/CNPJ dos sócios na versão pública, remuneração dos administradores nem histórico de alterações anteriores. Para isso é preciso a certidão da Junta Comercial.</p>
+
+<h2>Quantas empresas um sócio pode ter no Brasil?</h2>
+<p>Não há limite legal. Uma pessoa física pode ser sócia ou administradora de quantas empresas quiser. Com os dados do Jurídico Online — que reúne 27 milhões de registros de sócios da Receita Federal — é possível ver todas as empresas de qualquer pessoa em segundos.</p>
+
+<p>Empresas com sócios em comum formam o que chamamos de <strong>grupo econômico</strong>. Identificar esses grupos é essencial em due diligence, crédito e litígios.</p>
+
+<h2>QSA desatualizado — o que fazer?</h2>
+<p>Alterações no quadro societário registradas na Junta Comercial podem levar até 30 dias para refletir na base da Receita Federal. Se o QSA parecer desatualizado, consulte diretamente a Junta Comercial do estado ou acesse o <a href="https://redesim.gov.br" target="_blank" rel="nofollow noopener">REDESIM</a>.</p>
+
+<h2>Perguntas frequentes sobre QSA</h2>
+
+<h3>QSA e quadro societário são a mesma coisa?</h3>
+<p>Sim. QSA (Quadro de Sócios e Administradores) é o nome técnico usado pela Receita Federal. "Quadro societário" é o termo popular. Ambos se referem à mesma lista de responsáveis pela empresa.</p>
+
+<h3>Como consultar o QSA pelo nome do sócio?</h3>
+<p>A Receita Federal só permite busca por CNPJ. Para buscar pelo nome do sócio e ver todas as empresas que ele participa, use o <a href="/buscar">Jurídico Online</a> — a busca por sócio retorna todas as empresas vinculadas àquele nome.</p>
+
+<h3>É possível consultar QSA de empresa baixada?</h3>
+<p>Sim. Empresas baixadas, suspensas ou inaptas continuam com CNPJ registrado na Receita Federal. O QSA da data do encerramento fica disponível para consulta.</p>
+
+<h3>Consultar o QSA é gratuito?</h3>
+<p>Sim. O QSA é dado público por natureza — faz parte do CNPJ que é obrigatório divulgar. A consulta básica é gratuita na Receita Federal e no Jurídico Online. Apenas a certidão física da Junta Comercial tem custo.</p>
+
+<p><a href="/buscar" class="inline-block mt-6 bg-[#0F4C81] text-white rounded-lg px-6 py-3 font-semibold text-sm hover:bg-[#0a3a66] transition">Consultar QSA grátis agora →</a></p>`,
+  },
+
+  // ─── Post 2: Como saber sócios de uma empresa — SD 17 ────────────────────
+  {
+    slug: "como-saber-socios-de-uma-empresa-2026",
+    title: "Como saber os sócios de uma empresa em 2026 — 3 formas grátis",
+    excerpt: "Descubra os sócios de qualquer empresa brasileira gratuitamente: pelo CNPJ, pelo nome ou pelo CPF do sócio. Guia completo e atualizado.",
+    category: "Consulta CNPJ",
+    publishedAt: "2026-06-08",
+    updatedAt: "2026-06-08",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 6,
+    keywords: ["como saber socios de uma empresa", "consulta socios cnpj", "como descobrir socios empresa", "pesquisar socios pelo cnpj", "ver socios empresa gratis"],
+    body: `<p>Descobrir os sócios de uma empresa é simples e gratuito no Brasil. Todas as informações sobre quadro societário são <strong>dados públicos</strong> — qualquer cidadão pode acessar sem precisar de advogado, cartório ou pagar nada.</p>
+
+<p><a href="/buscar" class="inline-block my-4 bg-[#0F4C81] text-white rounded-lg px-5 py-2 font-medium text-sm hover:bg-[#0a3a66] transition">Pesquisar sócios grátis →</a></p>
+
+<h2>Por que consultar os sócios de uma empresa?</h2>
+<p>Antes de fechar qualquer negócio — contrato de fornecimento, parceria, investimento ou contratação — saber quem está por trás de uma empresa é essencial:</p>
+<ul>
+<li>Evitar negociar com empresas de fachada ou laranjas</li>
+<li>Verificar se o sócio tem histórico de empresas encerradas por dívidas</li>
+<li>Confirmar se a pessoa que diz ser "dono" realmente aparece no CNPJ</li>
+<li>Identificar grupos econômicos e conflitos de interesse</li>
+<li>Due diligence antes de M&A ou investimento</li>
+</ul>
+
+<h2>3 formas de descobrir os sócios de uma empresa</h2>
+
+<h3>Forma 1 — Jurídico Online (mais rápido, com histórico)</h3>
+<p>O <a href="/">Jurídico Online</a> reúne 65 milhões de empresas e 27 milhões de registros de sócios da Receita Federal. Para consultar:</p>
+<ol>
+<li>Acesse <a href="/buscar">juridicoonline.com.br/buscar</a></li>
+<li>Digite o CNPJ, razão social ou nome do sócio</li>
+<li>Veja o quadro societário completo: nome, qualificação, data de entrada</li>
+<li>Clique no sócio para ver todas as outras empresas que ele participa</li>
+</ol>
+<p>É a única plataforma que permite busca pelo <strong>nome do sócio</strong> e retorna todas as empresas vinculadas — útil para rastrear grupos econômicos.</p>
+
+<h3>Forma 2 — Receita Federal (oficial)</h3>
+<p>Acesse o Comprovante de Situação Cadastral da Receita Federal, informe o CNPJ e resolva o captcha. O documento PDF gerado contém o QSA. Limitação: não há busca por nome do sócio e o processo é manual (um CNPJ por vez).</p>
+
+<h3>Forma 3 — Junta Comercial do Estado</h3>
+<p>Para informações mais detalhadas — como CPF integral dos sócios, percentual de participação e histórico de alterações — acesse a Junta Comercial do estado onde a empresa está registrada. A certidão simplificada custa entre R$ 20 e R$ 50 mas é o documento mais completo.</p>
+
+<h2>Como pesquisar pelo nome do sócio</h2>
+<p>A Receita Federal <strong>não permite</strong> buscar pelo nome da pessoa — apenas pelo CNPJ. Para encontrar todas as empresas de uma pessoa pelo nome, use o <a href="/buscar">Jurídico Online</a>: digite o nome completo na busca e o sistema retorna o perfil do sócio com todas as empresas em que ele aparece como QSA.</p>
+
+<p>Essa funcionalidade é especialmente útil para:</p>
+<ul>
+<li>Verificar se um candidato a executivo já foi sócio de empresas problemáticas</li>
+<li>Rastrear se um devedor tem empresas ativas em seu nome</li>
+<li>Identificar se um fornecedor tem empresas relacionadas que poderiam criar conflito de interesse</li>
+</ul>
+
+<h2>O que o QSA não mostra</h2>
+<p>Importante saber o que a consulta básica <em>não</em> inclui:</p>
+<ul>
+<li><strong>CPF dos sócios</strong> — protegido pela LGPD na consulta pública</li>
+<li><strong>Percentual de cotas</strong> — só na Junta Comercial ou contrato social</li>
+<li><strong>Dívidas dos sócios</strong> — exige consulta ao SPC/Serasa</li>
+<li><strong>Histórico de alterações</strong> — quem entrou e saiu da sociedade ao longo do tempo</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+
+<h3>Como saber se o sócio de uma empresa tem outras empresas?</h3>
+<p>No <a href="/buscar">Jurídico Online</a>, clique no nome do sócio dentro da página da empresa. O sistema mostra o perfil completo do sócio com todas as empresas vinculadas a ele na Receita Federal — ativas, baixadas ou suspensas.</p>
+
+<h3>Posso consultar os sócios de uma empresa pelo CPF?</h3>
+<p>A consulta pública por CPF não está disponível por restrições da LGPD. A busca é feita por nome completo ou por CNPJ da empresa.</p>
+
+<h3>Quanto tempo demora para um sócio aparecer no QSA?</h3>
+<p>Após o registro na Junta Comercial, leva em média 15 a 30 dias para a alteração refletir na base da Receita Federal. Atualizações urgentes podem ser solicitadas diretamente na Receita.</p>
+
+<h3>É possível ver sócios de empresa baixada?</h3>
+<p>Sim. Empresas baixadas mantêm o CNPJ registrado e o QSA fica disponível para consulta — útil para rastrear histórico de inadimplência ou fraudes.</p>
+
+<p><a href="/buscar" class="inline-block mt-6 bg-[#0F4C81] text-white rounded-lg px-6 py-3 font-semibold text-sm hover:bg-[#0a3a66] transition">Ver sócios de qualquer empresa grátis →</a></p>`,
+  },
+
+  // ─── Post 3: Descobrir CNPJ pelo nome — SD 20 ────────────────────────────
+  {
+    slug: "como-descobrir-cnpj-empresa-pelo-nome",
+    title: "Como descobrir o CNPJ de uma empresa pelo nome — pesquisa grátis 2026",
+    excerpt: "Saiba como encontrar o CNPJ de qualquer empresa brasileira apenas pelo nome. Pesquisa rápida, gratuita e sem captcha.",
+    category: "Consulta CNPJ",
+    publishedAt: "2026-06-08",
+    updatedAt: "2026-06-08",
+    author: DEFAULT_AUTHOR,
+    readingMinutes: 5,
+    keywords: ["descobrir cnpj pelo nome", "pesquisar empresa pelo nome", "buscar cnpj por nome", "encontrar cnpj empresa", "consulta cnpj nome fantasia"],
+    body: `<p>Precisa encontrar o CNPJ de uma empresa mas só tem o nome? É possível e gratuito. Neste guia mostramos as formas mais rápidas de pesquisar o CNPJ de qualquer empresa brasileira pelo nome — sem burocracia e sem captcha.</p>
+
+<p><a href="/buscar" class="inline-block my-4 bg-[#0F4C81] text-white rounded-lg px-5 py-2 font-medium text-sm hover:bg-[#0a3a66] transition">Pesquisar CNPJ por nome grátis →</a></p>
+
+<h2>Como buscar CNPJ pelo nome no Jurídico Online</h2>
+<p>A forma mais rápida é usar o <a href="/buscar">Jurídico Online</a>:</p>
+<ol>
+<li>Acesse <strong>juridicoonline.com.br/buscar</strong></li>
+<li>Digite o nome da empresa (razão social ou nome fantasia)</li>
+<li>O sistema busca em mais de 65 milhões de empresas cadastradas na Receita Federal</li>
+<li>Veja o CNPJ, situação cadastral, endereço, sócios e contatos</li>
+</ol>
+
+<p>A busca funciona com parte do nome — você não precisa digitar o nome completo. "Magazine Lu" encontra "Magazine Luiza S.A.", por exemplo.</p>
+
+<h2>Diferença entre razão social e nome fantasia</h2>
+<p>Muitas empresas são conhecidas pelo <strong>nome fantasia</strong> mas o CNPJ está registrado pela <strong>razão social</strong>. Exemplos:</p>
+<ul>
+<li>Nome fantasia: "Boticário" → Razão social: "O Boticário do Brasil Ltda"</li>
+<li>Nome fantasia: "iFood" → Razão social: "iFood.com Agência de Restaurantes Online S.A."</li>
+<li>Nome fantasia: "Casas Bahia" → Razão social: "Via Varejo S.A."</li>
+</ul>
+<p>O Jurídico Online busca tanto pela razão social quanto pelo nome fantasia quando disponível na base da Receita Federal.</p>
+
+<h2>Empresa com várias unidades — qual CNPJ usar?</h2>
+<p>Grandes redes têm um CNPJ para cada unidade (filial). A <strong>matriz</strong> tem o CNPJ base (os 8 primeiros dígitos + 0001). As filiais têm o mesmo CNPJ base mas com sufixo diferente (0002, 0003...).</p>
+<p>Para nota fiscal, usar o CNPJ da filial que faz o atendimento. Para verificar a saúde da empresa, consulte a matriz.</p>
+
+<h2>Não encontrei a empresa — o que pode ter acontecido?</h2>
+<ul>
+<li><strong>Empresa recente</strong> — novos CNPJs levam até 24h para aparecer na base</li>
+<li><strong>Nome digitado errado</strong> — tente partes menores do nome</li>
+<li><strong>Empresa informal</strong> — sem CNPJ, trabalha "no negro" (sinal de alerta)</li>
+<li><strong>Empresa baixada</strong> — CNPJ cancelado mas ainda consultável</li>
+</ul>
+
+<h2>Por que confirmar o CNPJ antes de pagar?</h2>
+<p>Golpistas criam empresas falsas com nomes parecidos aos de grandes marcas. Antes de fazer qualquer pagamento para uma empresa nova, confirme que:</p>
+<ul>
+<li>O CNPJ existe e está <strong>ativo</strong> na Receita Federal</li>
+<li>A razão social bate com o contrato ou nota fiscal</li>
+<li>O endereço registrado faz sentido para o tipo de negócio</li>
+<li>Os sócios são pessoas reais (não laranjas)</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+
+<h3>Como pesquisar CNPJ pelo nome fantasia?</h3>
+<p>A Receita Federal usa a razão social como base, mas o <a href="/buscar">Jurídico Online</a> permite busca por nome fantasia quando disponível. Se não encontrar pelo nome fantasia, tente a razão social ou parte do nome.</p>
+
+<h3>É possível encontrar o CNPJ pelo endereço?</h3>
+<p>Diretamente não — a Receita Federal não disponibiliza busca por endereço. Mas pelo Jurídico Online você pode filtrar empresas por cidade, estado e CNAE (tipo de atividade), o que ajuda a identificar empresas num endereço específico.</p>
+
+<h3>Como saber se uma empresa tem CNPJ ativo?</h3>
+<p>Na página de resultado do Jurídico Online a situação cadastral aparece em destaque: <strong>ATIVA</strong> (verde), INAPTA, SUSPENSA ou BAIXADA. Empresas inaptas ou baixadas não podem emitir nota fiscal válida.</p>
+
+<h3>Posso buscar o CNPJ pelo CPF do sócio?</h3>
+<p>Não diretamente — a consulta pública por CPF é restrita pela LGPD. A alternativa é buscar pelo nome completo da pessoa no Jurídico Online, que retorna todas as empresas onde ela aparece como sócia.</p>
+
+<p><a href="/buscar" class="inline-block mt-6 bg-[#0F4C81] text-white rounded-lg px-6 py-3 font-semibold text-sm hover:bg-[#0a3a66] transition">Pesquisar empresa pelo nome agora →</a></p>`,
+  },
+
 ];
 
 export function getPost(slug: string): BlogPost | null {
